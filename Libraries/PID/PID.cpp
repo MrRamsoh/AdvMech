@@ -41,8 +41,8 @@ bool PID::Compute()
 	  int32_t input = *myInput;
       int32_t error = *mySetpoint - input;
       ITerm+= (ki * error);
-      if(ITerm > outMax) ITerm= outMax;
-      else if(ITerm < outMin) ITerm= outMin;
+      if(ITerm > 15) ITerm= 15;
+      else if(ITerm < -15) ITerm= -15;
       int32_t dInput = (input - lastInput);
 	  
  

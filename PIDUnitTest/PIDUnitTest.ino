@@ -12,6 +12,7 @@ Encoder right_encoder(3, 5, &right_encoder_distance, &right_encoder_velocity, tr
 PID left_PID(&left_encoder_velocity, &left_motor_PWM, &left_motor_setpoint, KP, KI, KD, DIRECT);
 PID right_PID(&right_encoder_velocity, &right_motor_PWM, &right_motor_setpoint, KP, KI, KD, DIRECT);
 
+unsigned long time=0;
 void setup() 
 {
   left_encoder.setHighPinA();
@@ -31,23 +32,27 @@ void setup()
   pinMode(12,INPUT);
   digitalWrite(12,HIGH);
   while(digitalRead(12)){}
-   left_motor_setpoint=1000;
+   left_motor_setpoint=-4000;
+   time=millis()-10000;
 }
 
 void loop()
 {
   //left_motor.setSpeed(255);
 
-   Serial.print(left_encoder_velocity);
+   Serial.print(left_motor_setpoint);
   
   Serial.print(",");
- Serial.print(left_encoder_distance);
-  Serial.println(",0");
+ Serial.print(left_encoder_velocity);
+  Serial.print(",");
+  Serial.println(left_motor_PWM);
   delay (10);
   right_encoder.compute();
   left_encoder.compute();
   right_PID.Compute();
   left_PID.Compute();
+  left_motor.setSpeed(left_motor_PWM);
+  if(millis()>time+10000) {left_motor_setpoint+=500; time=millis();}
   //if(left_encoder_distance >= 2980) {left_motor.setSpeed(0); delay(500); left_motor.setSpeed(-100);}
   //if(left_encoder_distance <0) {left_motor.setSpeed(0); delay(500);  left_motor.setSpeed(100);}
 }

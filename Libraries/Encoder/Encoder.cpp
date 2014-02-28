@@ -54,10 +54,10 @@ void Encoder::compute()
   unsigned long now = millis();
   unsigned long time_change = (now - last_time);
   
-  if(time_change >= 100)
+  if(time_change >= 20)
   {
-    float timeDialate = 100 / time_change;
-	*velocity= (int)((*position - last_pos) * 10 * timeDialate);
+    float timeDialate = 1000 / time_change;
+	*velocity= (int32_t)((*position - last_pos) * (int)timeDialate);
     last_pos = *position;
     last_time = millis();
   } 
