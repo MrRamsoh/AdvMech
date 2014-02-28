@@ -18,10 +18,9 @@
 //*****************************************************************************
 //                      I N C L U D E
 //*****************************************************************************
-#include <iom32v.h>
-#define ushort   unsigned char
-#define uint     unsigned int
-#include <macros.h>
+#include <avr/io.h>
+#include <avr/wdt.h>
+#include <avr/interrupt.h>
 #include <stdlib.h>
 #include <STRING.H>
 #include "TaskManager.h"
@@ -34,10 +33,10 @@
 typedef struct Task
 {
   FuncPTR Function;
-  uint Parameter;
-  uint Interval;
-  uint Ticker;
-  ushort Persiste;
+  uint16_t Parameter;
+  uint16_t Interval;
+  uint16_t Ticker;
+  uint8_t Persiste;
 }Task;
 Task TaskList[MAX_TASK];
 Task TaskAdd;
@@ -59,7 +58,7 @@ Misc:         Use Timer 0
 ******************************************************************************/
 void TaskInit(void)
 {
-	ushort i;
+	uint8_t i;
 
   for (i=0;i<TaskMax;i++)
   {
@@ -78,7 +77,7 @@ void TaskInit(void)
 
 Name:         int TaskRegister( void(*FunctionPTR)(void),
                                 int Interval,
-                                ushort Persiste)
+                                uint8_t Persiste)
 
 Description:  Register a function to be call
 
@@ -94,17 +93,17 @@ Misc:
 ******************************************************************************/
 int TaskRegister(   FuncPTR Function,
                     int Parameter,
-                    uint Interval,
-                    ushort Persiste)
+                    uint16_t Interval,
+                    uint8_t Persiste)
 {
-  uint i = 0;
+  uint16_t i = 0;
 
   if (Function == NULL) return 0;
   if (TaskMax >= MAX_TASK) return 0;
 
   while (TaskAdd.Function != NULL)
   {
-    WDR();
+    wdt_reset();
     if (i++ > 65530) return 0;
   }
 
@@ -131,13 +130,13 @@ Misc:
 ******************************************************************************/
 int TaskUnRegister(FuncPTR Function)
 {
-  uint i = 0;
+  uint16_t i = 0;
 
   if (Function == NULL) return 0;
 
   while(TaskDel.Function != NULL)
   {
-    WDR();
+    wdt_reset();
     if (i++ > 65530) return 0;
   }
 
@@ -161,7 +160,7 @@ Misc:
 **********************************************************/
 int TaskCheckRegister(FuncPTR Function)
 {
-  ushort i;
+  uint8_t i;
 
   for (i=0;i<TaskMax;i++)
   {
@@ -186,7 +185,7 @@ Misc:
 **********************************************************/
 int TaskCheckRegisterWParameter(int Parameter)
 {
-  ushort i;
+  uint8_t i;
 
   for (i=0;i<TaskMax;i++)
   {
@@ -211,11 +210,11 @@ Misc:
 ******************************************************************************/
 int TaskUnRegisterWParameter(int Parameter)
 {
-  uint i = 0;
+  uint16_t i = 0;
 
   while(TaskDel.Function != NULL)
   {
-    WDR();
+    wdt_reset();
     if (i++ > 65530) return 0;
   }
 
@@ -232,7 +231,7 @@ int TaskUnRegisterWParameter(int Parameter)
 
 /**********************************************************
 
-Name:         int TaskChangeInterval(void(*FunctionPTR)(void), uint Interval)
+Name:         int TaskChangeInterval(void(*FunctionPTR)(void), uint16_t Interval)
 
 Description:  Change the interval of a task
 
@@ -245,9 +244,9 @@ Output:       0 -> Not register
 Misc:
 
 **********************************************************/
-int TaskChangeInterval(FuncPTR Function, uint Interval)
+int TaskChangeInterval(FuncPTR Function, uint16_t Interval)
 {
-  ushort i;
+  uint8_t i;
 
   for (i=0;i<TaskMax;i++)
   {
@@ -309,15 +308,15 @@ Output:       none
 Misc:         TaskExecute is execute each 100us
 
 **********************************************************/
-#pragma interrupt_handler TaskExecute:12
-void TaskExecute(void)
+//#pragma interrupt_handler TaskExecute:12
+ISR(TIMER0_OVF_vect)
 {
-  static ushort i,j;
+  static uint8_t i,j;
   static FuncPTR Function;
 
-  TCNT0 = 255 - (XTAL / 8 / 10000);
+  TCNT0 = 255 - (F_CPU / 8UL / 10000UL);
   TaskStop();
-  WDR();
+  wdt_reset();
 
   if (TaskDel.Function != NULL) _TaskUnRegister();
   if (TaskAdd.Function != NULL) _TaskRegister();
@@ -336,9 +335,9 @@ void TaskExecute(void)
       {
         TaskList[i].Ticker = 0;
       }
-      SEI();
+      sei();
       Function(TaskList[i].Parameter);
-      CLI();
+      cli();
     }
   }
   TaskStart();
@@ -359,7 +358,7 @@ Misc:
 ******************************************************************************/
 void _TaskUnRegister(void)
 {
-  ushort i,j;
+  uint8_t i,j;
 
   for (i=0;i<TaskMax;i++)
   {

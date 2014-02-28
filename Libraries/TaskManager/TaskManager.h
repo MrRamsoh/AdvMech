@@ -13,7 +13,7 @@
 #define TASK_MAN_VER    10
 #define TRUE            1
 #define FALSE           0
-#define XTAL            16000000
+//#define F_CPU            16000000
 
 #define MAX_TASK        10
 
@@ -187,14 +187,14 @@
 //*****************************************************************************
 typedef void (*FuncPTR)(int);
 void TaskInit(void);
-int TaskRegister(FuncPTR Function,int Parameter,uint Interval,ushort Persiste);
+int TaskRegister(FuncPTR Function,int Parameter,uint16_t Interval,uint8_t Persiste);
 int TaskUnRegister(FuncPTR Function);
 int TaskCheckRegister(FuncPTR);
 int TaskCheckRegisterWParameter(int);
 int TaskUnRegisterWParameter(int);
-int TaskChangeInterval(FuncPTR, uint Interval);
+int TaskChangeInterval(FuncPTR, uint16_t Interval);
 void TaskStop(void);
 void TaskStart(void);
-void TaskExecute(void);
+//void TaskExecute(void);
 void _TaskUnRegister(void);
 void _TaskRegister(void);
