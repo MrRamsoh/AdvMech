@@ -39,3 +39,10 @@ unsigned long now = 0;
 unsigned long start = 0;
 
 int turn_speed;
+
+// Direction Up = 0, Right = 1, Down = 2, Left = 3
+// X Right is positive, Left is negative
+// Y Up is positive, Down is negative
+int robot_direction;
+int robot_x;
+int robot_y;
