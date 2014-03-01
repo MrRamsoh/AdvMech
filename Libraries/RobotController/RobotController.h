@@ -12,7 +12,7 @@
 #define KD 0
 
 #define STOP 0
-#define FORWARD_SPEED 10
+#define FORWARD_SPEED 2000
 #define FORWARD_SPEED_SLOW 400
 #define TURN_SPEED 200
 
