@@ -1,21 +1,46 @@
 #include <RobotController.h>
-#include <IRSensor.h>
+
 #include <Motor.h>
+#include <IRSensor.h>
 #include <LightSensor.h>
 
-IRSensor front_ir(A2);            // IR Sensor located at the front facing front. Analog 2
-IRSensor right_front_ir(A3);      // IR Sensor located at the front facing right. Analog 3
-//IRSensor right_rear_ir(A0);       // IR Sensor located at the rear facing right. Analog 0
+#include <Encoder.h>
+#include <PID.h>
 
-Motor left_motor(8, 10, false);    // Left Motor, Dir pin 8, PWM pin 10, direction revered
-Motor right_motor(7, 9, true);   // Right Motor, Dir pin 7, PWM pin 9, direction not reversed
+/*****************************************/
 
+// Front facing IR Sensor connected to Pin A2
+// Right facing front IR Sensor connected to Pin A3
+// Right facing rear IR Sensor connected to Pin A0
+IRSensor front_ir(A2);
+IRSensor right_front_ir(A3);
+//IRSensor right_rear_ir(A0);
+
+// Left Motor. Dir Pin 8, PWM Pin 10, direction not reversed
+// Right Motor. Dir Pin 7, PWM Pin 9, direction reversed
+Motor left_motor(8, 10, false);
+Motor right_motor(7, 9, true);
+
+// Left Encoder. Channel A Pin 2, Channel B Pin 4, direction reversed
+// Right Encoder. Channel A Pin 3, Channel B Pin 5, direction not reversed
+Encoder left_encoder(2, 4, &left_encoder_distance, &left_encoder_velocity, true);
+Encoder right_encoder(3, 5, &right_encoder_distance, &right_encoder_velocity, false);
+
+// Front Light Sensor conected to Pin A1
 LightSensor light(A1);
 
 int turnCount=0;
 
 void setup() 
 {
+  left_encoder.setHighPinA();
+  left_encoder.setLowPinB();
+  right_encoder.setHighPinA();
+  right_encoder.setHighPinB();
+  
+  attachInterrupt(0, updateLeftEncoder, CHANGE);
+  attachInterrupt(1, updateRightEncoder, CHANGE);
+  
   pinMode(12,INPUT);
   digitalWrite(12,HIGH);
   while(digitalRead(12)){}
@@ -139,4 +164,13 @@ void turnBack()
   setMotors();
   delay(1000);
   stop();
+}
+
+void updateLeftEncoder()
+{
+  left_encoder.tick();
+}
+void updateRightEncoder()
+{
+  right_encoder.tick();
 }
