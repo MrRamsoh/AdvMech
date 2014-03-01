@@ -34,8 +34,6 @@ PID right_PID(&right_encoder_velocity, &right_motor_PWM, &right_motor_setpoint, 
 // Front Light Sensor conected to Pin A1
 LightSensor light(A1);
 
-int turnCount=0;
-
 void setup() 
 {
   left_encoder.setHighPinA();
@@ -58,7 +56,6 @@ void setup()
 
 void loop()
 {
-  computeEncoderPID();
   driveRobot();      // Main controller
 }
 
@@ -67,7 +64,10 @@ void driveRobot()
   // light isnt on so must find miner
   if (!light.isOn())
   {
-    driveForward();
+    driveForwardCell();
+    turnLeft90EncoderFast();
+    driveForwardCell();
+    turnRight90EncoderFast();
   }
   // light is on therefore miner found
   else stop();
@@ -75,26 +75,153 @@ void driveRobot()
 
 /* driveForward()
  * Drives the robot continously forward in a straight line using speed control
+ *
+ * Default values:
+ * Left Setpoint = 1001
+ * Right Setpoint = 1005
 ***************************************************************************/
 void driveForward()
 {
   left_PID.SetMode(AUTOMATIC);  
-  right_PID.SetMode(AUTOMATIC);
+  right_PID.SetMode(AUTOMATIC);  
+  
   left_motor_setpoint = 1001;
   right_motor_setpoint = 1005;
+  computeEncoderPID();
   setMotors();
 }
 
+/* driveForwardCell()
+ * Drives the robot continously forward in a straight line using speed control
+ * until the next cell is reached.
+ *
+ * Default values:
+ * Left Setpoint = 1001
+ * Right Setpoint = 1005
+ * Next cell distance = 1000 // NOT FINALIZED YET
+***************************************************************************/
+void driveForwardCell()
+{
+  left_PID.SetMode(AUTOMATIC);  
+  right_PID.SetMode(AUTOMATIC);  
+  resetEncoder();
+  
+  do
+  { 
+    left_motor_setpoint = 1001;
+    right_motor_setpoint = 1005;
+    computeEncoderPID();
+    setMotors();
+  } while(((left_encoder_distance + right_encoder_distance) / 2) < 1000);      
+  stop();
+}
+
+/* turnLeft90EncoderFast()
+ * Turns the robot 90 degrees to the left using encoders as the limit of turn.
+ * PID is used to keep the motors spinning at constant speed.
+ *
+ * Default values:
+ * Turn limit = 620
+ * Left Setpoint = -1000
+ * Right Setpoint = 1000
+***************************************************************************/
+void turnLeft90EncoderFast()
+{
+  left_PID.SetMode(AUTOMATIC);  
+  right_PID.SetMode(AUTOMATIC);  
+  resetEncoder();
+  
+  while(abs(left_encoder_distance) < 620 && right_encoder_distance < 620)
+  {
+    left_motor_setpoint = -1000;
+    right_motor_setpoint = 1000;
+    computeEncoderPID();
+    setMotors();
+  }
+  stop();
+}
+
+/* turnRight90EncoderFast()
+ * Turns the robot 90 degrees to the right using encoders as the limit of turn.
+ * PID is used to keep the motors spinning at constant speed.
+ *
+ * Default values:
+ * Turn limit = 620
+ * Left Setpoint = 1000
+ * Right Setpoint = -1000
+***************************************************************************/
+void turnRight90EncoderFast()
+{
+  left_PID.SetMode(AUTOMATIC);  
+  right_PID.SetMode(AUTOMATIC);  
+  resetEncoder();
+  
+  while(abs(left_encoder_distance) < 620 && right_encoder_distance < 620)
+  {
+    left_motor_setpoint = 1000;
+    right_motor_setpoint = -1000;
+    computeEncoderPID();
+    setMotors();
+  }
+  stop();
+}
+
+/* turnLeft90EncoderSlow()
+ * Turns the robot 90 degrees to the left using encoders as the limit to turn.
+ * PID is used to keep the motors spinning at the desired speed.
+ * Desired speed is decreased as the robot approaches the completion of the
+ * 90 degree turn.
+ *
+ * The desired speed is calculated using the following equation:
+ * Turn speed = (Turn limit - average encoder distance) * (Multiplier / Turn limit)
+ *
+ * Default values:
+ * Turn limit = 630
+ * Multiplier = 1500
+ * Left motor = negative direction
+ * Right motor = positive direction
+***************************************************************************/
+void turnLeft90EncoderSlow()
+{
+  left_PID.SetMode(AUTOMATIC);  
+  right_PID.SetMode(AUTOMATIC);  
+  resetEncoder();
+  
+  while(abs(left_encoder_distance) < 630 && right_encoder_distance < 630)
+  {
+    turn_speed = (630 - ((abs(left_encoder_distance) + right_encoder_distance) / 2)) * (1500 / 630);
+    left_motor_setpoint = -turn_speed;
+    right_motor_setpoint = turn_speed;
+    computeEncoderPID();
+    setMotors();
+  }
+  stop();
+}
+
+/* resetEncoder()
+ * Resets the distances both the encoders have travelled to avoid overflow.
+ * Also useful for programming using the incremental method instead of absolute.
+***************************************************************************/
+void resetEncoder()
+{
+  left_encoder_distance = 0;
+  right_encoder_distance = 0;
+//  left_encoder_velocity = 0;
+//  right_encoder_velocity = 0;
+}
+
 /* stop()
- * Stops the robot from moving and keeps it stopped using speed control
+ * Stops the robot from moving
 ***************************************************************************/
 void stop()
 {
-  left_PID.SetMode(AUTOMATIC);
-  right_PID.SetMode(AUTOMATIC);  
+  left_PID.SetMode(MANUAL);  
+  right_PID.SetMode(MANUAL);  
+  
   left_motor_PWM = STOP;
   right_motor_PWM = STOP;
   setMotors();
+  delay(20);
 }
 
 void setMotors()

@@ -37,3 +37,5 @@ volatile int32_t right_motor_setpoint = 0;
 
 unsigned long now = 0;
 unsigned long start = 0;
+
+int turn_speed;
