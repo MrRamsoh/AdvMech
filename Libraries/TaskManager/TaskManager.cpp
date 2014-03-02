@@ -11,7 +11,7 @@
 //*****************************************************************************
 //                T I M E R   U S A G E
 //
-// Timer 0 is use by Task Manager
+// Timer 2 is use by Task Manager
 //
 //*****************************************************************************
 //
@@ -19,11 +19,11 @@
 //                      I N C L U D E
 //*****************************************************************************
 #include <avr/io.h>
-#include <avr/wdt.h>
+//#include <avr/wdt.h>
 #include <avr/interrupt.h>
 #include <stdlib.h>
-#include <STRING.H>
 #include "TaskManager.h"
+#include <string.h>
 //#define MINIMUM_CODE    // if def save 71 words of code but no more
                           // checking of Register and UnRegister
 
@@ -69,8 +69,9 @@ void TaskInit(void)
   }
 
   //Timer0
-  TCCR0 = 0x02;               // Timer0 / 8
-  TIMSK |= (1<<TOIE0);        // int enable on Timer 0 overflow
+  TCCR2A = 0x00;
+  TCCR2B = (1<<CS21);               // Timer2 / 8
+  TIMSK2 |= (1<<TOIE2);        // int enable on Timer 0 overflow
 }
 
 /******************************************************************************
@@ -103,13 +104,13 @@ int TaskRegister(   FuncPTR Function,
 
   while (TaskAdd.Function != NULL)
   {
-    wdt_reset();
+  //  wdt_reset();
     if (i++ > 65530) return 0;
   }
 
   TaskAdd.Function = Function;
   TaskAdd.Parameter = Parameter;
-  TaskAdd.Interval = Interval;
+  TaskAdd.Interval = Interval*.969744;
   TaskAdd.Persiste = Persiste;
   return 1;
 }
@@ -136,7 +137,7 @@ int TaskUnRegister(FuncPTR Function)
 
   while(TaskDel.Function != NULL)
   {
-    wdt_reset();
+   // wdt_reset();
     if (i++ > 65530) return 0;
   }
 
@@ -214,7 +215,7 @@ int TaskUnRegisterWParameter(int Parameter)
 
   while(TaskDel.Function != NULL)
   {
-    wdt_reset();
+   // wdt_reset();
     if (i++ > 65530) return 0;
   }
 
@@ -274,7 +275,7 @@ Misc:
 **********************************************************/
 void TaskStop(void)
 {
-  TIMSK &= ~(1<<TOIE0);   // int disable on Timer 0 overflow
+  TIMSK2 &= ~(1<<TOIE2);   // int disable on Timer 2 overflow
 }
 
 /**********************************************************
@@ -292,7 +293,7 @@ Misc:
 **********************************************************/
 void TaskStart(void)
 {
-  TIMSK |= (1<<TOIE0);    // int enable on Timer 0 overflow
+  TIMSK2 |= (1<<TOIE2);    // int enable on Timer 0 overflow
 }
 
 /**********************************************************
@@ -308,15 +309,15 @@ Output:       none
 Misc:         TaskExecute is execute each 100us
 
 **********************************************************/
-//#pragma interrupt_handler TaskExecute:12
-ISR(TIMER0_OVF_vect)
+
+ISR(TIMER2_OVF_vect)
 {
   static uint8_t i,j;
   static FuncPTR Function;
 
-  TCNT0 = 255 - (F_CPU / 8UL / 10000UL);
+  TCNT2 = 255 - (F_CPU / 8UL / 10000UL);
   TaskStop();
-  wdt_reset();
+  //wdt_reset();
 
   if (TaskDel.Function != NULL) _TaskUnRegister();
   if (TaskAdd.Function != NULL) _TaskRegister();

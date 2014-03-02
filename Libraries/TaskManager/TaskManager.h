@@ -1,3 +1,6 @@
+#ifndef _TASKMAN_
+#define _TASKMAN_
+
 //*****************************************************************************
 // TaskManager.h
 // Version 1.0 Dec 2004
@@ -198,3 +201,5 @@ void TaskStart(void);
 //void TaskExecute(void);
 void _TaskUnRegister(void);
 void _TaskRegister(void);
+
+#endif
