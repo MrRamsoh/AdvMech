@@ -36,6 +36,13 @@ LightSensor light(A1);
 
 void setup() 
 {
+// Direction Up = 0, Right = 1, Down = 2, Left = 3
+// X Right is positive, Left is negative
+// Y Up is positive, Down is negative
+  robot_direction = 0;
+  robot_x = 0;
+  robot_y = 0;
+
   left_encoder.setHighPinA();
   left_encoder.setLowPinB();
   right_encoder.setHighPinA();
@@ -114,6 +121,11 @@ void driveForwardCell()
     setMotors();
   } while(((left_encoder_distance + right_encoder_distance) / 2) < 1000);      
   stop();
+  
+  if (robot_direction == 0) {robot_y++;}
+  else if (robot_direction == 1) {robot_x++;}
+  else if (robot_direction == 2) {robot_y--;}
+  else if (robot_direction == 3) {robot_x--;}
 }
 
 /* turnLeft90EncoderFast()
@@ -139,6 +151,11 @@ void turnLeft90EncoderFast()
     setMotors();
   }
   stop();
+  
+  if (robot_direction == 0) {robot_direction = 3;}
+  else if (robot_direction == 1) {robot_direction = 0;}
+  else if (robot_direction == 2) {robot_direction = 1;}
+  else if (robot_direction == 3) {robot_direction = 2;}
 }
 
 /* turnRight90EncoderFast()
@@ -164,6 +181,11 @@ void turnRight90EncoderFast()
     setMotors();
   }
   stop();
+  
+  if (robot_direction == 0) {robot_direction = 1;}
+  else if (robot_direction == 1) {robot_direction = 2;}
+  else if (robot_direction == 2) {robot_direction = 3;}
+  else if (robot_direction == 3) {robot_direction = 0;}
 }
 
 /* turnLeft90EncoderSlow()
