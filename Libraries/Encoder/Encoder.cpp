@@ -66,7 +66,8 @@ void Encoder::compute()
 void Encoder::staticCompute(int objectPointer)
 {
 	Encoder* encode = (Encoder*) objectPointer;
-	encode->compute();
+	*encode->velocity= (int32_t)((*encode->position - encode->last_pos) * 50);
+    encode->last_pos = *encode->position;
 }
 	
 

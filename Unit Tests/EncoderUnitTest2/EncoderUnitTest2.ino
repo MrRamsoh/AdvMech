@@ -1,3 +1,4 @@
+#include <TaskManager.h>
 #include <Encoder.h>
 #include <Motor.h>
 #include <RobotController.h>
@@ -7,6 +8,8 @@ Motor right_motor(7, 9, true);   // Right Motor, Dir pin 7, PWM pin 9, direction
 
 Encoder left_encoder(2, 4, &left_encoder_distance, &left_encoder_velocity, true);
 Encoder right_encoder(3, 5, &right_encoder_distance, &right_encoder_velocity, false);
+
+
 
 void setup() 
 {
@@ -19,6 +22,11 @@ void setup()
   attachInterrupt(1, updateRightEncoder, CHANGE);
   
   Serial.begin(9600);
+  TaskInit();
+  TaskRegister(&Encoder::staticCompute,(int)&left_encoder,T20MS,TRUE);
+  delay(100);
+  TaskRegister(&Encoder::staticCompute,(int)&right_encoder,T20MS,TRUE);
+  
   
   pinMode(12,INPUT);
   digitalWrite(12,HIGH);
@@ -31,12 +39,10 @@ void setup()
 
 void loop()
 {
-  Encoder::staticCompute((int)&left_encoder);
-  Encoder::staticCompute((int)&right_encoder);
- 
   Serial.print(left_encoder_velocity);
   Serial.print("        ");  
   Serial.println(right_encoder_velocity);
+  delay(100);
 }
 
 void setMotors()
