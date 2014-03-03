@@ -72,9 +72,27 @@ void driveRobot()
   if (!light.isOn())
   {
     driveForwardCell();
-    turnLeft90EncoderFast();
+    delay(500);
     driveForwardCell();
+    delay(500);
+    driveForwardCell();
+    delay(500);
+    driveForwardCell();
+    delay(500);
     turnRight90EncoderFast();
+    delay(500);
+    driveForwardCell();
+    delay(500);
+    driveForwardCell();
+    delay(500);
+    turnRight90EncoderFast();
+    delay(500);
+    driveForwardCell();
+    delay(500);
+    driveForwardCell();
+    delay(500);
+    turnRight90EncoderFast();
+    delay(10000);
   }
   // light is on therefore miner found
   else stop();
@@ -92,7 +110,7 @@ void driveForward()
   left_PID.SetMode(AUTOMATIC);  
   right_PID.SetMode(AUTOMATIC);  
   
-  left_motor_setpoint = 1001;
+  left_motor_setpoint = 1004;
   right_motor_setpoint = 1005;
   computeEncoderPID();
   setMotors();
@@ -105,7 +123,7 @@ void driveForward()
  * Default values:
  * Left Setpoint = 1001
  * Right Setpoint = 1005
- * Next cell distance = 1000 // NOT FINALIZED YET
+ * Next cell distance = 1550 
 ***************************************************************************/
 void driveForwardCell()
 {
@@ -119,7 +137,7 @@ void driveForwardCell()
     right_motor_setpoint = 1005;
     computeEncoderPID();
     setMotors();
-  } while(((left_encoder_distance + right_encoder_distance) / 2) < 1000);      
+  } while(((left_encoder_distance + right_encoder_distance) / 2) < 1550);      
   stop();
   
   if (robot_direction == 0) {robot_y++;}
@@ -145,8 +163,8 @@ void turnLeft90EncoderFast()
   
   while(abs(left_encoder_distance) < 620 && right_encoder_distance < 620)
   {
-    left_motor_setpoint = -1000;
-    right_motor_setpoint = 1000;
+    left_motor_setpoint = -800;
+    right_motor_setpoint = 800;
     computeEncoderPID();
     setMotors();
   }
@@ -175,8 +193,8 @@ void turnRight90EncoderFast()
   
   while(abs(left_encoder_distance) < 620 && right_encoder_distance < 620)
   {
-    left_motor_setpoint = 1000;
-    right_motor_setpoint = -1000;
+    left_motor_setpoint = 800;
+    right_motor_setpoint = -800;
     computeEncoderPID();
     setMotors();
   }
