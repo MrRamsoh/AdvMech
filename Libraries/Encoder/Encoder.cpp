@@ -63,10 +63,10 @@ void Encoder::compute()
   } 
 }
 
-static void staticCompute(int objectPointer)
+void Encoder::staticCompute(int objectPointer)
 {
 	Encoder* encode = (Encoder*) objectPointer;
-	encode.compute();
+	encode->compute();
 }
 	
 
