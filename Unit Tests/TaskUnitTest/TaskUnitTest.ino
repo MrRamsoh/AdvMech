@@ -58,6 +58,6 @@ void updateRightEncoder()
 void test (int garbage)
 {
   
-  Serial.println((int)(millis()-last-1000));
+  Serial.println((int)(millis()-last));
   last=millis();
 }
