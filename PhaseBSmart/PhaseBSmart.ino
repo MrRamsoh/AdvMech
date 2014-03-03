@@ -1,5 +1,4 @@
 #include <TaskManager.h>
-
 #include <RobotController.h>
 
 #include <Motor.h>
@@ -63,10 +62,10 @@ void setup()
   delay(50);
   TaskRegister(&Encoder::staticCompute,(int)&right_encoder,T20MS,TRUE);
   delay(50);
-  TaskRegister(&PID::staticCompute,(int)&left_PID,T50MS,TRUE);
-  delay(50);
-  TaskRegister(&PID::staticCompute,(int)&right_PID,T50MS,TRUE);
-  delay(50);
+//  TaskRegister(&PID::staticCompute,(int)&left_PID,T50MS,TRUE);
+//  delay(50);
+//  TaskRegister(&PID::staticCompute,(int)&right_PID,T50MS,TRUE);
+//  delay(50);
   TaskStop();
   
   TaskStart();
@@ -100,8 +99,8 @@ void driveRobot()
 //    delay(500);
     driveForwardCell();
     delay(500);
-    turnRight90EncoderFast();
-    delay(500);
+//    turnRight90EncoderFast();
+//    delay(500);
 //    driveForwardCell();
 //    delay(500);
 //    driveForwardCell();
@@ -152,6 +151,7 @@ void driveForwardCell()
   { 
     left_motor_setpoint = 1001;
     right_motor_setpoint = 1005;
+    computeEncoderPID();
     setMotors();
   } while(((left_encoder_distance + right_encoder_distance) / 2) < 1550);      
   stop();
@@ -181,7 +181,7 @@ void turnLeft90EncoderFast()
   {
     left_motor_setpoint = -800;
     right_motor_setpoint = 800;
-    
+    computeEncoderPID();
     setMotors();
   }
   stop();
@@ -211,7 +211,7 @@ void turnRight90EncoderFast()
   {
     left_motor_setpoint = 800;
     right_motor_setpoint = -800;
-
+    computeEncoderPID();
     setMotors();
   }
   stop();
@@ -303,8 +303,8 @@ void computeIR()
 ***************************************************************************/
 void computeEncoderPID()
 {
-  right_encoder.compute();
-  left_encoder.compute();
+//  right_encoder.compute();
+//  left_encoder.compute();
   
   right_PID.Compute();
   left_PID.Compute();
