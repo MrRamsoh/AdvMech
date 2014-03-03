@@ -1,3 +1,5 @@
+#include <TaskManager.h>
+
 #include <RobotController.h>
 
 #include <Motor.h>
@@ -56,6 +58,19 @@ void setup()
   attachInterrupt(0, updateLeftEncoder, RISING);
   attachInterrupt(1, updateRightEncoder, RISING);
   
+  TaskInit();
+  TaskRegister(&Encoder::staticCompute,(int)&left_encoder,T20MS,TRUE);
+  delay(50);
+  TaskRegister(&Encoder::staticCompute,(int)&right_encoder,T20MS,TRUE);
+  delay(50);
+  TaskRegister(&PID::staticCompute,(int)&left_PID,T50MS,TRUE);
+  delay(50);
+  TaskRegister(&PID::staticCompute,(int)&right_PID,T50MS,TRUE);
+  delay(50);
+  TaskStop();
+  
+  TaskStart();
+  
 //  pinMode(12,INPUT);
 //  digitalWrite(12,HIGH);
 //  while(digitalRead(12)){}
@@ -71,28 +86,30 @@ void driveRobot()
   // light isnt on so must find miner
   if (!light.isOn())
   {
-    driveForwardCell();
-    delay(500);
-    driveForwardCell();
-    delay(500);
-    driveForwardCell();
-    delay(500);
-    driveForwardCell();
-    delay(500);
-    turnRight90EncoderFast();
-    delay(500);
-    driveForwardCell();
-    delay(500);
-    driveForwardCell();
-    delay(500);
-    turnRight90EncoderFast();
-    delay(500);
-    driveForwardCell();
-    delay(500);
+//    driveForwardCell();
+//    delay(500);
+//    driveForwardCell();
+//    delay(500);
+//    driveForwardCell();
+//    delay(500);
+//    driveForwardCell();
+//    delay(500);
+//    turnRight90EncoderFast();
+//    delay(500);
+//    driveForwardCell();
+//    delay(500);
     driveForwardCell();
     delay(500);
     turnRight90EncoderFast();
-    delay(10000);
+    delay(500);
+//    driveForwardCell();
+//    delay(500);
+//    driveForwardCell();
+//    delay(500);
+//    turnRight90EncoderFast();
+//    delay(10000);
+
+    
   }
   // light is on therefore miner found
   else stop();
@@ -112,7 +129,7 @@ void driveForward()
   
   left_motor_setpoint = 1004;
   right_motor_setpoint = 1005;
-  computeEncoderPID();
+
   setMotors();
 }
 
@@ -135,7 +152,6 @@ void driveForwardCell()
   { 
     left_motor_setpoint = 1001;
     right_motor_setpoint = 1005;
-    computeEncoderPID();
     setMotors();
   } while(((left_encoder_distance + right_encoder_distance) / 2) < 1550);      
   stop();
@@ -165,7 +181,7 @@ void turnLeft90EncoderFast()
   {
     left_motor_setpoint = -800;
     right_motor_setpoint = 800;
-    computeEncoderPID();
+    
     setMotors();
   }
   stop();
@@ -195,7 +211,7 @@ void turnRight90EncoderFast()
   {
     left_motor_setpoint = 800;
     right_motor_setpoint = -800;
-    computeEncoderPID();
+
     setMotors();
   }
   stop();
@@ -232,7 +248,7 @@ void turnLeft90EncoderSlow()
     turn_speed = (630 - ((abs(left_encoder_distance) + right_encoder_distance) / 2)) * (1500 / 630);
     left_motor_setpoint = -turn_speed;
     right_motor_setpoint = turn_speed;
-    computeEncoderPID();
+
     setMotors();
   }
   stop();
