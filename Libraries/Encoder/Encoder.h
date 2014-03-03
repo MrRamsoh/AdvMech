@@ -9,6 +9,7 @@ class Encoder
     Encoder(int8_t PinA, int8_t PinB, volatile int32_t *Ticks, volatile int32_t *Velocity, boolean Flip);
     void tick();
     void compute();
+	static void staticCompute(uint8_t objectPointer);
     int32_t getPosition();
     void setPosition(const int32_t p);
     void setLowPinA();

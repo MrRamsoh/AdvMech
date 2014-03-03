@@ -63,6 +63,15 @@ void Encoder::compute()
   } 
 }
 
+static void staticCompute(int objectPointer)
+{
+	Encoder* encode = (Encoder*) objectPointer;
+	encode.compute();
+}
+	
+
+
+
 /* getPosition()
  * Returns the displacement of the encoder since the start.
 ***************************************************************************/
