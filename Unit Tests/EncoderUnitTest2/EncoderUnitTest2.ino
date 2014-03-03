@@ -18,8 +18,8 @@ void setup()
   right_encoder.setHighPinA();
   right_encoder.setHighPinB();
   
-  attachInterrupt(0, updateLeftEncoder, CHANGE);
-  attachInterrupt(1, updateRightEncoder, CHANGE);
+  attachInterrupt(0, updateLeftEncoder, RISING);
+  attachInterrupt(1, updateRightEncoder, RISING);
   
   Serial.begin(9600);
   TaskInit();

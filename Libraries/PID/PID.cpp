@@ -64,6 +64,29 @@ bool PID::Compute()
    }	  
 }
 
+void PID::staticCompute(int objectPointer)
+{
+	PID* pid = (PID*) objectPointer;
+	int32_t input = *pid->myInput;
+	int32_t error = *pid->mySetpoint - input;
+	pid->ITerm+= (pid->ki * error);
+	if(pid->ITerm > 15) pid->ITerm= 15;
+	else if(pid->ITerm < -15) pid->ITerm= -15;
+	int32_t dInput = (input - pid->lastInput);
+
+
+	/*Compute PID Output*/
+	double output = pid->kp * error + pid->ITerm- pid->kd * dInput;
+
+	if(output > pid->outMax) output = pid->outMax;
+	else if(output < pid->outMin) output = pid->outMin;
+	*pid->myOutput += output;
+
+	/*Remember some variables for next time*/
+	pid->lastInput = input;
+}
+
+
 /* SetTunings(...)*************************************************************
  * This function allows the controller's dynamic performance to be adjusted. 
  * it's called automatically from the constructor, but tunings can also
