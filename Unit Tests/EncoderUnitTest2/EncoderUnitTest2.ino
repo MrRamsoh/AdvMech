@@ -31,8 +31,8 @@ void setup()
 
 void loop()
 {
-  Encoder::staticCompute((int)&left_encoder);
-  Encoder::staticCompute((int)&right_encoder);
+  right_encoder.compute();
+  left_encoder.compute();
  
   Serial.print(left_encoder_velocity);
   Serial.print("        ");  
