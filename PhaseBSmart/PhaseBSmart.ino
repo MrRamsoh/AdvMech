@@ -62,6 +62,8 @@ void setup()
   delay(50);
   TaskRegister(&Encoder::staticCompute,(int)&right_encoder,T20MS,TRUE);
   delay(50);
+  TaskRegister(&computeIR,-1,T50MS,TRUE);
+  delay(50);
 //  TaskRegister(&PID::staticCompute,(int)&left_PID,T50MS,TRUE);
 //  delay(50);
 //  TaskRegister(&PID::staticCompute,(int)&right_PID,T50MS,TRUE);
@@ -98,7 +100,7 @@ void driveRobot()
 //    driveForwardCell();
 //    delay(500);
     driveForwardCell();
-    delay(500);
+    delay(1000);
 //    turnRight90EncoderFast();
 //    delay(500);
 //    driveForwardCell();
@@ -149,11 +151,12 @@ void driveForwardCell()
   
   do
   { 
-    left_motor_setpoint = 1001;
-    right_motor_setpoint = 1005;
+    increment = difference_distance * 50;
+    left_motor_setpoint = 1001 - increment;
+    right_motor_setpoint = 1005 + increment;
     computeEncoderPID();
     setMotors();
-  } while(((left_encoder_distance + right_encoder_distance) / 2) < 1550);      
+  } while((((left_encoder_distance + right_encoder_distance) / 2) < 1550) && (front_ir_distance > 8 || front_ir_distance == NULL));      
   stop();
   
   if (robot_direction == 0) {robot_y++;}
@@ -286,16 +289,6 @@ void setMotors()
   right_motor.setSpeed(right_motor_PWM); 
 }
 
-void computeIR()
-{
-  front_ir_distance = front_ir.getDistance();
-  right_front_ir_distance = right_front_ir.getDistance();
-//  right_rear_ir_distance = right_rear_ir.getDistance();
-  
-//  average_distance = (right_front_ir_distance + right_rear_ir_distance) / 2;
-//  difference_distance = abs(right_front_ir_distance - right_rear_ir_distance);
-}
-
 /* computeEncoderPID()
  * Calls the encoder compute function to calculate the speeds of the two motors.
  * Calls the PID compute function to calculate the correct PWM value to keep
@@ -310,11 +303,12 @@ void computeEncoderPID()
   left_PID.Compute();
 }
 
-void computeIR()
+void computeIR(int garbage)
 {
   front_ir_distance = front_ir.getDistance(); 
   left_ir_distance = left_ir.getDistance(); 
-  right_ir_distance = right_ir.getDistance(); 
+  right_ir_distance = right_ir.getDistance();
+  difference_distance = left_ir_distance - right_ir_distance;
 }
 
 void updateLeftEncoder()

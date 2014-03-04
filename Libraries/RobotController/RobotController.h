@@ -7,7 +7,8 @@
 #define FRONT_STOP_DISTANCE 7
 #define STRAIGHT_TOLERANCE 0.7
 
-#define KP 0.0625
+//#define KP 0.0625
+#define KP 0.08
 #define KI 0
 #define KD 0
 
