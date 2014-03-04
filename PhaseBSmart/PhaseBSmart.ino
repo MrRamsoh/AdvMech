@@ -68,10 +68,7 @@ void setup()
 //  delay(50);
 //  TaskRegister(&PID::staticCompute,(int)&right_PID,T50MS,TRUE);
 //  delay(50);
-  TaskStop();
-  
-  TaskStart();
-  
+ 
 //  pinMode(12,INPUT);
 //  digitalWrite(12,HIGH);
 //  while(digitalRead(12)){}
@@ -87,30 +84,66 @@ void driveRobot()
   // light isnt on so must find miner
   if (!light.isOn())
   {
-//    driveForwardCell();
-//    delay(500);
     driveForwardCell();
     delay(500);
-//    driveForwardCell();
-//    delay(500);
-//    driveForwardCell();
-//    delay(500);
-//    turnRight90EncoderFast();
-//    delay(500);
-//    driveForwardCell();
-//    delay(500);
-//    driveForwardCell();
-//    delay(500);
-//    turnRight90EncoderFast();
-//    delay(500);
-//    driveForwardCell();
-//    delay(500);
-//    driveForwardCell();
-//    delay(500);
-//    turnRight90EncoderFast();
-//    delay(10000);
+    driveForwardCell();
+    delay(500);
+    turnRight90EncoderFast();
+    delay(500);
+    driveForwardCell();
+    delay(500);
+    driveForwardCell();
+    delay(500);
+    turnRight90EncoderFast();
+    delay(500);
+    driveForwardCell();
+    delay(500);
+    driveForwardCell();
+    delay(500);
+    turnLeft90EncoderFast();
+    delay(500);   
+    driveForwardCell();
+    delay(500);
+    driveForwardCell();
+    delay(500);
+    driveForwardCell();
+    delay(500);
+    driveForwardCell();
+    delay(500);
+    turnLeft90EncoderFast();
+    delay(500);
+    driveForwardCell();
+    delay(500);
+    driveForwardCell();
+    delay(500);   
+    turnLeft90EncoderFast();
+    delay(500);
+    driveForwardCell();
+    delay(500);   
+    turnLeft90EncoderFast();
+    delay(500);
+    driveForwardCell();
+    delay(50000);
+    
 
     
+//    driveForwardCell();
+//    delay(500);
+//    driveForwardCell();
+//    delay(500);
+
+//    driveForwardCell();
+//    delay(500);
+//    driveForwardCell();
+//    delay(500);
+//    turnRight90EncoderFast();
+//    delay(500);
+//    driveForwardCell();
+//    delay(500);
+//    driveForwardCell();
+//    delay(500);
+//    turnRight90EncoderFast();
+//    delay(10000);   
   }
   // light is on therefore miner found
   else stop();
@@ -141,7 +174,7 @@ void driveForward()
  * Default values:
  * Left Setpoint = 1001
  * Right Setpoint = 1005
- * Next cell distance = 1550 
+ * One cell distance = 1550 
 ***************************************************************************/
 void driveForwardCell()
 {
@@ -175,10 +208,10 @@ void driveForwardCell()
 
     computeEncoderPID();
     setMotors();
-  } while((((left_encoder_distance + right_encoder_distance) / 2) < 1550) && (front_ir_distance > 8 || front_ir_distance == NULL));      
+  } while((((left_encoder_distance + right_encoder_distance) / 2) < ONE_CELL_DISTANCE) && (front_ir_distance > FRONT_STOP_DISTANCE || front_ir_distance == NULL));      
   stop();
   
-  if (front_ir_distance < 12 && front_ir_distance > 8)
+  if (front_ir_distance < 12 && front_ir_distance > FRONT_STOP_DISTANCE)
   {
     goto correct;
   }
