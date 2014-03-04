@@ -26,17 +26,17 @@ float difference_distance;
 
 float increment;
 
-volatile int32_t left_encoder_distance = 0;
-volatile int32_t right_encoder_distance = 0;
+volatile int16_t left_encoder_distance = 0;
+volatile int16_t right_encoder_distance = 0;
 
-volatile int32_t left_encoder_velocity = 0;
-volatile int32_t right_encoder_velocity = 0;
+volatile int16_t left_encoder_velocity = 0;
+volatile int16_t right_encoder_velocity = 0;
 
-volatile int32_t left_motor_PWM = 0;
-volatile int32_t right_motor_PWM = 0;
+volatile int16_t left_motor_PWM = 0;
+volatile int16_t right_motor_PWM = 0;
 
-volatile int32_t left_motor_setpoint = 0;
-volatile int32_t right_motor_setpoint = 0;
+volatile int16_t left_motor_setpoint = 0;
+volatile int16_t right_motor_setpoint = 0;
 
 unsigned long now = 0;
 unsigned long start = 0;

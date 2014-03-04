@@ -7,7 +7,7 @@ class Encoder
 {
 
   public:
-    Encoder(int8_t PinA, int8_t PinB, volatile int32_t *Ticks, volatile int32_t *Velocity, boolean Flip);
+    Encoder(int8_t PinA, int8_t PinB, volatile int16_t *Ticks, volatile int16_t *Velocity, boolean Flip);
     void tick();
     void compute();
 	static void staticCompute(int objectPointer);
@@ -19,13 +19,13 @@ class Encoder
     void setHighPinB();
 
   private:
-    volatile int32_t *position; 
-    volatile int32_t *velocity;	
+    volatile int16_t *position; 
+    volatile int16_t *velocity;	
     int8_t pin_a;
     int8_t pin_b;
     boolean flip;
     unsigned long last_time;
-    unsigned long last_pos;
+    uint16_t last_pos;
 };
 
 #endif

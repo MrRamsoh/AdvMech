@@ -5,7 +5,7 @@
  *    The parameters specified here are those for for which we can't set up 
  *    reliable defaults, so we need to have the user set them.
  ***************************************************************************/
-PID::PID(volatile int32_t* Input, volatile int32_t* Output, volatile int32_t* Setpoint,
+PID::PID(volatile int16_t* Input, volatile int16_t* Output, volatile int16_t* Setpoint,
         double Kp, double Ki, double Kd, int ControllerDirection)
 {
     myOutput = Output;

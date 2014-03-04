@@ -8,7 +8,7 @@
  * Pointer to Velocity = Memory location where the velocity is stored
  * Direction Flip = Decides whether to count clockwise as positive or negative movement
 ***************************************************************************/
-Encoder::Encoder(int8_t PinA, int8_t PinB, volatile int32_t *Ticks, volatile int32_t *Velocity, boolean Flip)
+Encoder::Encoder(int8_t PinA, int8_t PinB, volatile int16_t *Ticks, volatile int16_t *Velocity, boolean Flip)
 {
   pin_a = PinA;
   pin_b = PinB;
@@ -57,7 +57,7 @@ void Encoder::compute()
   if(time_change >= 20)
   {
     float timeDialate = 1000 / time_change;
-	*velocity= (int32_t)((*position - last_pos) * (int)timeDialate);
+	*velocity= (int16_t)((*position - last_pos) * (int)timeDialate);
     last_pos = *position;
     last_time = millis();
   } 
