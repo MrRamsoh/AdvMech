@@ -1,5 +1,5 @@
-#ifndef L3G_h
-#define L3G_h
+#ifndef GYRO_h
+#define GYRO_h
 
 #include <Arduino.h> // for byte data type
 
@@ -49,7 +49,7 @@
 #define L3G_INT1_THS_ZL   0x37
 #define L3G_INT1_DURATION 0x38
 
-class L3G
+class Gyro
 {
   public:
     typedef struct vector

@@ -1,4 +1,4 @@
-#include <L3G.h>
+#include <Gyro.h>
 #include <Wire.h>
 #include <math.h>
 
@@ -13,7 +13,7 @@
 
 // Public Methods //////////////////////////////////////////////////////////////
 
-bool L3G::init(byte device, byte sa0)
+bool Gyro::init(byte device, byte sa0)
 {
   _device = device;
   switch (_device)
@@ -54,7 +54,7 @@ bool L3G::init(byte device, byte sa0)
 }
 
 // Turns on the L3G's gyro and places it in normal mode.
-void L3G::enableDefault(void)
+void Gyro::enableDefault(void)
 {
   // 0x0F = 0b00001111
   // Normal power mode, all axes enabled
@@ -62,7 +62,7 @@ void L3G::enableDefault(void)
 }
 
 // Writes a gyro register
-void L3G::writeReg(byte reg, byte value)
+void Gyro::writeReg(byte reg, byte value)
 {
   Wire.beginTransmission(address);
   Wire.write(reg);
@@ -71,7 +71,7 @@ void L3G::writeReg(byte reg, byte value)
 }
 
 // Reads a gyro register
-byte L3G::readReg(byte reg)
+byte Gyro::readReg(byte reg)
 {
   byte value;
 
@@ -86,7 +86,7 @@ byte L3G::readReg(byte reg)
 }
 
 // Reads the 3 gyro channels and stores them in vector g
-void L3G::read()
+void Gyro::read()
 {
   Wire.beginTransmission(address);
   // assert the MSB of the address to get the gyro
@@ -110,19 +110,19 @@ void L3G::read()
   g.z = (int16_t)(zhg << 8 | zlg);
 }
 
-void L3G::vector_cross(const vector *a,const vector *b, vector *out)
+void Gyro::vector_cross(const vector *a,const vector *b, vector *out)
 {
   out->x = a->y*b->z - a->z*b->y;
   out->y = a->z*b->x - a->x*b->z;
   out->z = a->x*b->y - a->y*b->x;
 }
 
-float L3G::vector_dot(const vector *a,const vector *b)
+float Gyro::vector_dot(const vector *a,const vector *b)
 {
   return a->x*b->x+a->y*b->y+a->z*b->z;
 }
 
-void L3G::vector_normalize(vector *a)
+void Gyro::vector_normalize(vector *a)
 {
   float mag = sqrt(vector_dot(a,a));
   a->x /= mag;
@@ -132,7 +132,7 @@ void L3G::vector_normalize(vector *a)
 
 // Private Methods //////////////////////////////////////////////////////////////
 
-bool L3G::autoDetectAddress(void)
+bool Gyro::autoDetectAddress(void)
 {
   // try each possible address and stop if reading WHO_AM_I returns the expected response
   address = L3G4200D_ADDRESS_SA0_LOW;
