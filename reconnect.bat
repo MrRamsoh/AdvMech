@@ -5,6 +5,7 @@ rd /s /q D:\Documents\Dropbox\projects\arduino-1.0.5\libraries\Motor
 rd /s /q D:\Documents\Dropbox\projects\arduino-1.0.5\libraries\PID
 rd /s /q D:\Documents\Dropbox\projects\arduino-1.0.5\libraries\RobotController
 rd /s /q D:\Documents\Dropbox\projects\arduino-1.0.5\libraries\TaskManager
+rd /s /q D:\Documents\Dropbox\projects\arduino-1.0.5\libraries\Gyro
 
 PAUSE
 
@@ -15,5 +16,6 @@ mklink /j D:\Documents\Dropbox\projects\arduino-1.0.5\libraries\Motor D:\Documen
 mklink /j D:\Documents\Dropbox\projects\arduino-1.0.5\libraries\PID D:\Documents\GitHub\AdvMech\Libraries\PID
 mklink /j D:\Documents\Dropbox\projects\arduino-1.0.5\libraries\RobotController D:\Documents\GitHub\AdvMech\Libraries\RobotController
 mklink /j D:\Documents\Dropbox\projects\arduino-1.0.5\libraries\TaskManager D:\Documents\GitHub\AdvMech\Libraries\TaskManager
+mklink /j D:\Documents\Dropbox\projects\arduino-1.0.5\libraries\Gyro D:\Documents\GitHub\AdvMech\Libraries\Gyro
 
 PAUSE

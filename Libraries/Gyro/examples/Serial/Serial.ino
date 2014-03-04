@@ -1,5 +1,6 @@
-#include <Wire.h>
 #include <Gyro.h>
+#include <Wire.h>
+
 
 Gyro gyro;
 
