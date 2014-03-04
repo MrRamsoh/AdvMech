@@ -52,8 +52,8 @@ void setup()
   delay(50);
   TaskRegister(&Encoder::staticCompute,(int)&right_encoder,T20MS,TRUE);
   delay(50);
-  
-  pinMode(13, OUTPUT);
+  TaskRegister(&computeIR,-1,T50MS,TRUE);
+  delay(50);
   
 //  pinMode(12,INPUT);
 //  digitalWrite(12,HIGH);
@@ -72,16 +72,12 @@ void driveForwardCell()
   resetEncoder();
   do
   {
-    computeIR();
     increment = difference_distance * 50;
     left_motor_setpoint = 1001 - increment;
     right_motor_setpoint = 1005 + increment;
     computeEncoderPID();
     setMotors();
   } while((((left_encoder_distance + right_encoder_distance) / 2) < 1550) && (front_ir_distance > 8 || front_ir_distance == NULL));
-  digitalWrite(13, HIGH);
-  delay(100);
-  digitalWrite(13, LOW);
 }
 
 void computeEncoderPID()
@@ -93,7 +89,7 @@ void computeEncoderPID()
   left_PID.Compute();
 }
 
-void computeIR()
+void computeIR(int garbage)
 {
   front_ir_distance = front_ir.getDistance(); 
   left_ir_distance = left_ir.getDistance(); 

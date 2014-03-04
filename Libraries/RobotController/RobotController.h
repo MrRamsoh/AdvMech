@@ -22,7 +22,9 @@ float left_ir_distance;
 float right_ir_distance;
 	
 float average_distance;
-float difference_distance;
+float both_difference_distance;
+float left_difference_distance;
+float right_difference_distance;
 
 float increment;
 

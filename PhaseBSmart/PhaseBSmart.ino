@@ -89,8 +89,8 @@ void driveRobot()
   {
 //    driveForwardCell();
 //    delay(500);
-//    driveForwardCell();
-//    delay(500);
+    driveForwardCell();
+    delay(500);
 //    driveForwardCell();
 //    delay(500);
 //    driveForwardCell();
@@ -99,8 +99,8 @@ void driveRobot()
 //    delay(500);
 //    driveForwardCell();
 //    delay(500);
-    driveForwardCell();
-    delay(1000);
+//    driveForwardCell();
+//    delay(500);
 //    turnRight90EncoderFast();
 //    delay(500);
 //    driveForwardCell();
@@ -147,17 +147,41 @@ void driveForwardCell()
 {
   left_PID.SetMode(AUTOMATIC);  
   right_PID.SetMode(AUTOMATIC);  
+
+  correct:
+
   resetEncoder();
   
   do
   { 
-    increment = difference_distance * 50;
-    left_motor_setpoint = 1001 - increment;
-    right_motor_setpoint = 1005 + increment;
+    if (left_ir_distance != NULL && right_ir_distance == NULL)
+    {
+      increment = left_difference_distance * 50;
+      left_motor_setpoint = 1001 - increment;
+      right_motor_setpoint = 1005 + increment;
+    }
+    else if (left_ir_distance == NULL && right_ir_distance != NULL)
+    {
+      increment = right_difference_distance * 50;
+      left_motor_setpoint = 1001 + increment;
+      right_motor_setpoint = 1005 - increment;
+    }
+    else
+    {
+      increment = both_difference_distance * 50;
+      left_motor_setpoint = 1001 - increment;
+      right_motor_setpoint = 1005 + increment;
+    }
+
     computeEncoderPID();
     setMotors();
   } while((((left_encoder_distance + right_encoder_distance) / 2) < 1550) && (front_ir_distance > 8 || front_ir_distance == NULL));      
   stop();
+  
+  if (front_ir_distance < 12 && front_ir_distance > 8)
+  {
+    goto correct;
+  }
   
   if (robot_direction == 0) {robot_y++;}
   else if (robot_direction == 1) {robot_x++;}
@@ -308,7 +332,10 @@ void computeIR(int garbage)
   front_ir_distance = front_ir.getDistance(); 
   left_ir_distance = left_ir.getDistance(); 
   right_ir_distance = right_ir.getDistance();
-  difference_distance = left_ir_distance - right_ir_distance;
+  
+  both_difference_distance = left_ir_distance - right_ir_distance;
+  left_difference_distance = left_ir_distance - FOLLOW_DISTANCE;
+  right_difference_distance = right_ir_distance - FOLLOW_DISTANCE;  
 }
 
 void updateLeftEncoder()
