@@ -16,12 +16,14 @@
 #define FORWARD_SPEED_SLOW 400
 #define TURN_SPEED 200
 
-double front_ir_distance;
-double left_ir_distance;
-double right_ir_distance;
+float front_ir_distance;
+float left_ir_distance;
+float right_ir_distance;
 	
-double average_distance;
-double difference_distance;
+float average_distance;
+float difference_distance;
+
+float increment;
 
 volatile int32_t left_encoder_distance = 0;
 volatile int32_t right_encoder_distance = 0;

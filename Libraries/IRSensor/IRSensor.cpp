@@ -34,7 +34,7 @@ int IRSensor::getValue()
  * If the raw value is between the correct bounds, it is converted to cm and sent back.
  * If it falls outside the bounds, 0 is returned.
 ***************************************************************************/
-double IRSensor::getDistance()
+float IRSensor::getDistance()
 {
   int read_val = analogRead(pin);
   

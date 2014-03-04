@@ -12,7 +12,7 @@ class IRSensor
   public:
     IRSensor(uint8_t Pin);
     int getValue();
-    double getDistance();
+    float getDistance();
     
   private:
     uint8_t pin;

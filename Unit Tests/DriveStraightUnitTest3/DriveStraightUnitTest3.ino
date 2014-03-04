@@ -71,8 +71,9 @@ void driveForwardCell()
   do
   {
     computeIR();
-    left_motor_setpoint = 1001;
-    right_motor_setpoint = 1005;
+    increment = difference_distance * 10;
+    left_motor_setpoint = 1001 - increment;
+    right_motor_setpoint = 1005 + increment;
     computeEncoderPID();
     setMotors();
   } while(((left_encoder_distance + right_encoder_distance) / 2) < 1550);      
@@ -89,7 +90,10 @@ void computeEncoderPID()
 
 void computeIR()
 {
-  front_ir_distance = front_ir.getDistance();
+  front_ir_distance = front_ir.getDistance(); 
+  left_ir_distance = left_ir.getDistance(); 
+  right_ir_distance = right_ir.getDistance(); 
+  difference_distance = left_ir_distance - right_ir_distance;
 }
 
 void setMotors()
@@ -129,9 +133,3 @@ void resetEncoder()
   right_encoder_distance = 0;
 }
 
-void computeIR()
-{
-  front_ir_distance = front_ir.getDistance(); 
-  left_ir_distance = left_ir.getDistance(); 
-  right_ir_distance = right_ir.getDistance(); 
-}
