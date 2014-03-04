@@ -16,7 +16,11 @@ Motor left_motor(8, 10, false);
 Motor right_motor(7, 9, true);
 
 // Front facing IR Sensor connected to Pin A2
+// Left facing front IR Sensor connected to Pin A0
+// Right facing rear IR Sensor connected to Pin A3
 IRSensor front_ir(A2);
+IRSensor left_ir(A0);
+IRSensor right_ir(A3);
 
 // Left Encoder. Channel A Pin 2, Channel B Pin 4, direction reversed
 // Right Encoder. Channel A Pin 3, Channel B Pin 5, direction not reversed
@@ -66,6 +70,7 @@ void driveForwardCell()
   resetEncoder();
   do
   {
+    computeIR();
     left_motor_setpoint = 1001;
     right_motor_setpoint = 1005;
     computeEncoderPID();
@@ -122,4 +127,11 @@ void resetEncoder()
 {
   left_encoder_distance = 0;
   right_encoder_distance = 0;
+}
+
+void computeIR()
+{
+  front_ir_distance = front_ir.getDistance(); 
+  left_ir_distance = left_ir.getDistance(); 
+  right_ir_distance = right_ir.getDistance(); 
 }

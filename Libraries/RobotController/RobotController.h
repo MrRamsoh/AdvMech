@@ -16,9 +16,9 @@
 #define FORWARD_SPEED_SLOW 400
 #define TURN_SPEED 200
 
-double right_front_ir_distance;
-double right_rear_ir_distance;
 double front_ir_distance;
+double left_ir_distance;
+double right_ir_distance;
 	
 double average_distance;
 double difference_distance;

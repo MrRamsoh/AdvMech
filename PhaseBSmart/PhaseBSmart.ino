@@ -11,11 +11,11 @@
 /*****************************************/
 
 // Front facing IR Sensor connected to Pin A2
-// Right facing front IR Sensor connected to Pin A3
-// Right facing rear IR Sensor connected to Pin A0
+// Left facing front IR Sensor connected to Pin A0
+// Right facing rear IR Sensor connected to Pin A3
 IRSensor front_ir(A2);
-IRSensor right_front_ir(A3);
-// IRSensor right_rear_ir(A0);
+IRSensor left_ir(A0);
+IRSensor right_ir(A3);
 
 // Left Motor. Dir Pin 8, PWM Pin 10, direction not reversed
 // Right Motor. Dir Pin 7, PWM Pin 9, direction reversed
@@ -308,6 +308,13 @@ void computeEncoderPID()
   
   right_PID.Compute();
   left_PID.Compute();
+}
+
+void computeIR()
+{
+  front_ir_distance = front_ir.getDistance(); 
+  left_ir_distance = left_ir.getDistance(); 
+  right_ir_distance = right_ir.getDistance(); 
 }
 
 void updateLeftEncoder()
