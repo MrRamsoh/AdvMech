@@ -2,7 +2,7 @@
 #define GYRO_h
 
 #include <Arduino.h> // for byte data type
-
+#include <Wire.h>
 // device types
 
 #define L3G_DEVICE_AUTO 0
@@ -49,35 +49,72 @@
 #define L3G_INT1_THS_ZL   0x37
 #define L3G_INT1_DURATION 0x38
 
+
+#define SAMPLENUM 500
+
+//constructor defines
+
+#define SCALE250 1
+#define SCALE500 2
+#define SCALE2000 8 
+
+#define ENABLEX 0x0A
+#define ENABLEY 0x09
+#define ENABLEZ 0x0C
+
+
 class Gyro
 {
-  public:
-    typedef struct vector
-    {
-      float x, y, z;
-    } vector;
+	public:
+		Gyro();
+		Gyro(byte enable, byte scale, byte sampleTime);
+		typedef struct vector
+		{
+			float x, y, z;
+		} vector;
 
-    vector g; // gyro angular velocity readings
+		vector g; // gyro angular velocity readings
 
-    bool init(byte device = L3GD20_DEVICE, byte sa0 = L3G_SA0_AUTO);
+		bool init(byte device = L3GD20_DEVICE, byte sa0 = L3G_SA0_AUTO);
+		void enableDefault(void);
+		void enable(byte enable, byte scale);
 
-    void enableDefault(void);
+		void writeReg(byte reg, byte value);
+		byte readReg(byte reg);
 
-    void writeReg(byte reg, byte value);
-    byte readReg(byte reg);
+		void read(void);
+		void readZ(void);
+		
+		void calibrateZ(void);
+		
+		static void staticComputeZ(int objectPointer);
 
-    void read(void);
+		// vector functions
+		static void vector_cross(const vector *a, const vector *b, vector *out);
+		static float vector_dot(const vector *a,const vector *b);
+		static void vector_normalize(vector *a);
+		
+		//get functions
+		uint8_t getSampleTime(void);
+		uint8_t getScale(void);
+		int getDc_offset(void);
+		int getRate(void);
+		float getNoise(void);
+		float getAngle(void);
 
-    // vector functions
-    static void vector_cross(const vector *a, const vector *b, vector *out);
-    static float vector_dot(const vector *a,const vector *b);
-    static void vector_normalize(vector *a);
-
-  private:
-      byte _device; // chip type (4200D or D20)
-      byte address;
-
-      bool autoDetectAddress(void);
+	private:
+		byte _device; // chip type (4200D or D20)
+		byte address;
+		uint8_t sampleTime;
+		uint8_t scale;
+		int dc_offset;
+		int rate;
+		float noise;
+		int prev_rate;
+		float angle;
+		bool autoDetectAddress(void);
 };
+
+
 
 #endif
