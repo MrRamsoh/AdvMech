@@ -18,7 +18,6 @@ Gyro::Gyro(byte enableValue, byte scaleValue, byte sampleTimeValue)
 	scale=scaleValue;
 	sampleTime=sampleTimeValue;
 	uint8_t sampleTime=0;
-	uint8_t scale=1;
 	int dc_offset=0;
 	int rate=0;
 	float noise=0;
@@ -148,6 +147,9 @@ void Gyro::readZ()
 	g.z = (int16_t)(zhg << 8 | zlg);
 }
 
+
+
+
 void Gyro::calibrateZ(void)
 {
 	for(int n=0;n<SAMPLENUM;n++)
@@ -165,13 +167,16 @@ void Gyro::calibrateZ(void)
 		else if((int)g.z-dc_offset<-noise) 
 			noise=-(int)g.z-dc_offset; 
 	} 
-	noise=noise/(114.286/scale);
-/* 	Serial.println(); 
+	noise=(float)(noise/(114.286/(float)scale));
+	//if(noise<.5) noise=1;
+	g.z=0;
+/*  	Serial.println(); 
 	Serial.print("DC Offset: "); 
 	Serial.print(dc_offset); 
-	Serial.print("\tNoise Level: "); 
-	Serial.print(noise); 
-	Serial.println();  */
+	Serial.print("\tNoise Level: ");
+	int n = floor((noise * 100.0) + 0.5);
+	Serial.print(n); 
+	Serial.println(); */  
 }
 
 // Static Methods //////////////////////////////////////////////////////////////
@@ -180,11 +185,11 @@ void Gyro::staticComputeZ(int objectPointer)
 {
 	Gyro* gyro = (Gyro*) objectPointer;
 	gyro->readZ(); 
-	gyro->rate=((int)gyro->g.z-gyro->dc_offset)/(114.286/gyro->scale); 
+	gyro->rate=((float)gyro->g.z-gyro->dc_offset)/(114.286/(float)gyro->scale); 
 	// Ignore the gyro if our angular velocity does not meet our threshold 
 	if(gyro->rate >= gyro->noise || gyro->rate <= -gyro->noise)
 	{
-		gyro->angle += ((double)(gyro->prev_rate + gyro->rate) * (double)gyro->sampleTime) / 2000UL; 
+		gyro->angle += ((float)(gyro->prev_rate + gyro->rate) * (float)gyro->sampleTime) / 2000UL; 
 	}
 	// remember the current speed for the next loop rate integration. 
 	gyro->prev_rate = gyro->rate; 
@@ -220,7 +225,7 @@ void Gyro::vector_normalize(vector *a)
 uint8_t Gyro::getSampleTime(void) {return sampleTime;}
 uint8_t Gyro::getScale(void) {return scale;}
 int     Gyro::getDc_offset(void) {return dc_offset;}
-int     Gyro::getRate(void) {return rate;}
+float     Gyro::getRate(void) {return rate;}
 float   Gyro::getNoise(void) {return noise;}
 float   Gyro::getAngle(void) {return angle;}
 
