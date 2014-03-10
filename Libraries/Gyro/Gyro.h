@@ -98,8 +98,8 @@ class Gyro
 		uint8_t getSampleTime(void);
 		uint8_t getScale(void);
 		int getDc_offset(void);
-		float getRate(void);
-		float getNoise(void);
+		int getRate(void);
+		double getNoise(void);
 		float getAngle(void);
 
 	private:
@@ -108,9 +108,9 @@ class Gyro
 		uint8_t sampleTime;
 		uint8_t scale;
 		int dc_offset;
-		float rate;
-		float noise;
-		float prev_rate;
+		int rate;
+		double noise;
+		int prev_rate;
 		float angle;
 		bool autoDetectAddress(void);
 };

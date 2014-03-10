@@ -62,7 +62,7 @@ delay(50);
 turnRight90EncoderFast();
  Serial.print("noise: "); 
  int n = floor((gyro.getNoise() * 100.0) + 0.5);
- Serial.print(n);
+ Serial.print(gyro.getNoise());
  Serial.print("\tangle: "); 
  Serial.print(gyro.getAngle()); 
  Serial.print("\tmaxrate: "); 
