@@ -205,20 +205,20 @@ void driveForwardCell()
     if (left_ir_distance != NULL && right_ir_distance == NULL)
     {
       increment = left_difference_distance * 50;
-      left_motor_setpoint = 1001 - increment;
-      right_motor_setpoint = 1005 + increment;
+      left_motor_setpoint = 1001/(abs(left_difference_distance)*.4+1) - increment;
+      right_motor_setpoint = 1005/(abs(left_difference_distance)*.5+1) + increment;
     }
     else if (left_ir_distance == NULL && right_ir_distance != NULL)
     {
       increment = right_difference_distance * 50;
-      left_motor_setpoint = 1001 + increment;
-      right_motor_setpoint = 1005 - increment;
+      left_motor_setpoint = 1001/(abs(right_difference_distance)*.4+1) + increment;
+      right_motor_setpoint = 1005/(abs(right_difference_distance)*.4+1) - increment;
     }
     else
     {
       increment = both_difference_distance * 50;
-      left_motor_setpoint = 1001 - increment;
-      right_motor_setpoint = 1005 + increment;
+      left_motor_setpoint = 1001/(abs(both_difference_distance)*.4+1) - increment;
+      right_motor_setpoint = 1005/(abs(both_difference_distance)*.4+1) + increment;
     }
 
     computeEncoderPID();
