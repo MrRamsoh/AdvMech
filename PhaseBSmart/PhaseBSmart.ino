@@ -141,25 +141,43 @@ void driveRobot()
     delay(100); 
   }
   
-  delay(50000);
-}
-
-/* driveForward()
- * Drives the robot continously forward in a straight line using speed control
- *
- * Default values:
- * Left Setpoint = 1001
- * Right Setpoint = 1005
-***************************************************************************/
-void driveForward()
-{
-  left_PID.SetMode(AUTOMATIC);  
-  right_PID.SetMode(AUTOMATIC);  
+  turnRight90EncoderFast();
+  delay(300);
   
-  left_motor_setpoint = 1004;
-  right_motor_setpoint = 1005;
-
-  setMotors();
+  for(int i = 0; i < 2; i++)
+  {
+    driveForwardCell();
+    delay(100); 
+  }
+  
+  turnRight90EncoderFast();
+  delay(300);
+  
+  for(int i = 0; i < 2; i++)
+  {
+    driveForwardCell();
+    delay(100); 
+  }
+  
+  turnLeft90EncoderFast();
+  delay(300);
+  
+  for(int i = 0; i < 2; i++)
+  {
+    driveForwardCell();
+    delay(100); 
+  }
+  
+  turnLeft90EncoderFast();
+  delay(300);
+  
+  for(int i = 0; i < 2; i++)
+  {
+    driveForwardCell();
+    delay(100); 
+  } 
+  
+  delay(50000);
 }
 
 /* driveForwardCell()
@@ -236,7 +254,7 @@ void turnLeft90EncoderFast()
   right_PID.SetMode(AUTOMATIC);  
   resetEncoder();
   
-  while(abs(left_encoder_distance) < 620 && right_encoder_distance < 620)
+  while(abs(left_encoder_distance) < 630 && right_encoder_distance < 630)
   {
     left_motor_setpoint = -800;
     right_motor_setpoint = 800;
@@ -279,38 +297,6 @@ void turnRight90EncoderFast()
   else if (robot_direction == 1) {robot_direction = 2;}
   else if (robot_direction == 2) {robot_direction = 3;}
   else if (robot_direction == 3) {robot_direction = 0;}
-}
-
-/* turnLeft90EncoderSlow()
- * Turns the robot 90 degrees to the left using encoders as the limit to turn.
- * PID is used to keep the motors spinning at the desired speed.
- * Desired speed is decreased as the robot approaches the completion of the
- * 90 degree turn.
- *
- * The desired speed is calculated using the following equation:
- * Turn speed = (Turn limit - average encoder distance) * (Multiplier / Turn limit)
- *
- * Default values:
- * Turn limit = 630
- * Multiplier = 1500
- * Left motor = negative direction
- * Right motor = positive direction
-***************************************************************************/
-void turnLeft90EncoderSlow()
-{
-  left_PID.SetMode(AUTOMATIC);  
-  right_PID.SetMode(AUTOMATIC);  
-  resetEncoder();
-  
-  while(abs(left_encoder_distance) < 630 && right_encoder_distance < 630)
-  {
-    turn_speed = (630 - ((abs(left_encoder_distance) + right_encoder_distance) / 2)) * (1500 / 630);
-    left_motor_setpoint = -turn_speed;
-    right_motor_setpoint = turn_speed;
-
-    setMotors();
-  }
-  stop();
 }
 
 /* resetEncoder()
