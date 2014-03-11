@@ -81,62 +81,67 @@ void loop()
 
 void driveRobot()
 {
-  // light isnt on so must find miner
-  if (!light.isOn())
+  for(int i = 0; i < 3; i++)
   {
-//    for(int i = 0; i < 3; i++)
-//    {
-//      driveForwardCell();
-//      delay(100); 
-//    }
-//    
-//    turnRight90EncoderFast();
-//    delay(300);
-//    
-//    for(int i = 0; i < 7; i++)
-//    {
-//      driveForwardCell();
-//      delay(100); 
-//    }
-//    
-//    turnRight90EncoderFast();
-//    delay(300);
-//    driveForwardCell();
-//    delay(100);     
-//    turnRight90EncoderFast();
-//    delay(300);    
-    
-    for(int i = 0; i < 2; i++)
-    {
-      driveForwardCell();
-      delay(100); 
-    }
-    
-    turnLeft90EncoderFast();
-    delay(300);
-   
     driveForwardCell();
-    delay(100);
-    
-    turnLeft90EncoderFast();
-    delay(300);
-    
-    for(int i = 0; i < 3; i++)
-    {
-      driveForwardCell();
-      delay(300); 
-    }
-    
-    turnLeft90EncoderFast();
-    delay(300);
-   
-    driveForwardCell();
-    delay(100);
-    
-    delay(50000);
+    delay(100); 
   }
-  // light is on therefore miner found
-  else stop();
+  
+  turnRight90EncoderFast();
+  delay(300);
+ 
+  driveForwardCell();
+  delay(100);
+  
+  turnRight90EncoderFast();
+  delay(300);
+  
+  for(int i = 0; i < 2; i++)
+  {
+    driveForwardCell();
+    delay(100); 
+  }
+  
+  turnLeft90EncoderFast();
+  delay(300);
+ 
+  for(int i = 0; i < 2; i++)
+  {
+    driveForwardCell();
+    delay(100); 
+  }
+
+  turnLeft90EncoderFast();
+  delay(300);
+  
+  driveForwardCell();
+  delay(100);
+  
+  turnLeft90EncoderFast();
+  delay(300);
+  
+  driveForwardCell();
+  delay(100);
+  
+  turnRight90EncoderFast();
+  delay(300);
+  
+  for(int i = 0; i < 2; i++)
+  {
+    driveForwardCell();
+    delay(100); 
+  }
+  
+  turnLeft90EncoderFast();
+  delay(300);
+  
+  for(int i = 0; i < 2; i++)
+  {
+    driveForwardCell();
+    delay(100); 
+  }
+  
+  delay(50000);
 }
 
 /* driveForward()

@@ -60,15 +60,16 @@ delay(50);
 void loop() {
 delay(50);
 turnRight90EncoderFast();
- Serial.print("noise: "); 
- int n = floor((gyro.getNoise() * 100.0) + 0.5);
- Serial.print(gyro.getNoise());
- Serial.print("\tangle: "); 
- Serial.print(gyro.getAngle()); 
- Serial.print("\tmaxrate: "); 
- Serial.println(maxRate); 
- while(1){}
+// Serial.print("noise: "); 
+// int n = floor((gyro.getNoise() * 100.0) + 0.5);
+// Serial.print(gyro.getNoise());
+// Serial.print("\tangle: "); 
+// Serial.print(gyro.getAngle()); 
+// Serial.print("\tmaxrate: "); 
+// Serial.println(maxRate); 
+// while(1){}
  
+ delay(1000);
  
 }
 

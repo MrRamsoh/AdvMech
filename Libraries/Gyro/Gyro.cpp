@@ -158,7 +158,7 @@ void Gyro::calibrateZ(void)
 	} 
 	dc_offset=dc_offset/SAMPLENUM; 
  
-	for(int n=0;n<SAMPLENUM;n++)
+/* 	for(int n=0;n<SAMPLENUM;n++)
 	{ 
 		this->readZ(); 
 		if((int)g.z-dc_offset>noise) 
@@ -166,15 +166,17 @@ void Gyro::calibrateZ(void)
 		else if((int)g.z-dc_offset<-noise) 
 			noise=-(int)g.z-dc_offset; 
 		delay(5);
-	} 
-	noise=noise/(double)(114.286/scale);
+	}  */
+//	noise=noise/(double)(114.286/scale);
+    noise = 2;
+
 	if (noise<1) noise=1;
-/*  	Serial.println(); 
+  	Serial.println(); 
 	Serial.print("DC Offset: "); 
 	Serial.print(dc_offset); 
 	Serial.print("\tNoise Level: "); 
 	Serial.print(noise); 
-	Serial.println();   */
+	Serial.println();   
 }
 
 // Static Methods //////////////////////////////////////////////////////////////
@@ -193,11 +195,11 @@ void Gyro::staticComputeZ(int objectPointer)
 	gyro->prev_rate = gyro->rate; 
 	
 	// Keep our angle between 0-359 degrees 
-	if (gyro->angle < 0) 
+/* 	if (gyro->angle < 0) 
 		gyro->angle += 360; 
 	else if (gyro->angle >= 360) 
-		gyro->angle -= 360; 
-	}
+		gyro->angle -= 360; */
+	} 
 
 void Gyro::vector_cross(const vector *a,const vector *b, vector *out)
 {
