@@ -4,7 +4,7 @@
 #include "Arduino.h"
 
 #define IR_UPPER_LIMIT 600
-#define IR_LOWER_LIMIT 110
+#define IR_LOWER_LIMIT 160
 #define NULL 0
 
 class IRSensor

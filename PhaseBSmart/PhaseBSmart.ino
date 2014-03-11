@@ -84,66 +84,56 @@ void driveRobot()
   // light isnt on so must find miner
   if (!light.isOn())
   {
-    driveForwardCell();
-    delay(500);
-    driveForwardCell();
-    delay(500);
-    turnRight90EncoderFast();
-    delay(500);
-    driveForwardCell();
-    delay(500);
-    driveForwardCell();
-    delay(500);
-    turnRight90EncoderFast();
-    delay(500);
-    driveForwardCell();
-    delay(500);
-    driveForwardCell();
-    delay(500);
+//    for(int i = 0; i < 3; i++)
+//    {
+//      driveForwardCell();
+//      delay(100); 
+//    }
+//    
+//    turnRight90EncoderFast();
+//    delay(300);
+//    
+//    for(int i = 0; i < 7; i++)
+//    {
+//      driveForwardCell();
+//      delay(100); 
+//    }
+//    
+//    turnRight90EncoderFast();
+//    delay(300);
+//    driveForwardCell();
+//    delay(100);     
+//    turnRight90EncoderFast();
+//    delay(300);    
+    
+    for(int i = 0; i < 2; i++)
+    {
+      driveForwardCell();
+      delay(100); 
+    }
+    
     turnLeft90EncoderFast();
-    delay(500);   
+    delay(300);
+   
     driveForwardCell();
-    delay(500);
-    driveForwardCell();
-    delay(500);
-    driveForwardCell();
-    delay(500);
-    driveForwardCell();
-    delay(500);
+    delay(100);
+    
     turnLeft90EncoderFast();
-    delay(500);
-    driveForwardCell();
-    delay(500);
-    driveForwardCell();
-    delay(500);   
+    delay(300);
+    
+    for(int i = 0; i < 3; i++)
+    {
+      driveForwardCell();
+      delay(300); 
+    }
+    
     turnLeft90EncoderFast();
-    delay(500);
+    delay(300);
+   
     driveForwardCell();
-    delay(500);   
-    turnLeft90EncoderFast();
-    delay(500);
-    driveForwardCell();
+    delay(100);
+    
     delay(50000);
-    
-
-    
-//    driveForwardCell();
-//    delay(500);
-//    driveForwardCell();
-//    delay(500);
-
-//    driveForwardCell();
-//    delay(500);
-//    driveForwardCell();
-//    delay(500);
-//    turnRight90EncoderFast();
-//    delay(500);
-//    driveForwardCell();
-//    delay(500);
-//    driveForwardCell();
-//    delay(500);
-//    turnRight90EncoderFast();
-//    delay(10000);   
   }
   // light is on therefore miner found
   else stop();
@@ -179,7 +169,9 @@ void driveForward()
 void driveForwardCell()
 {
   left_PID.SetMode(AUTOMATIC);  
-  right_PID.SetMode(AUTOMATIC);  
+  right_PID.SetMode(AUTOMATIC);
+  
+  int x = 0;
 
   correct:
 
@@ -209,12 +201,14 @@ void driveForwardCell()
     computeEncoderPID();
     setMotors();
   } while((((left_encoder_distance + right_encoder_distance) / 2) < ONE_CELL_DISTANCE) && (front_ir_distance > FRONT_STOP_DISTANCE || front_ir_distance == NULL));      
-  stop();
+//  stop();
   
-  if (front_ir_distance < 12 && front_ir_distance > FRONT_STOP_DISTANCE)
+  if (front_ir_distance > FRONT_STOP_DISTANCE && front_ir_distance < 12 && x == 0)
   {
+    x = 1;
     goto correct;
   }
+  stop();
   
   if (robot_direction == 0) {robot_y++;}
   else if (robot_direction == 1) {robot_x++;}
@@ -368,7 +362,7 @@ void computeIR(int garbage)
   
   both_difference_distance = left_ir_distance - right_ir_distance;
   left_difference_distance = left_ir_distance - FOLLOW_DISTANCE;
-  right_difference_distance = right_ir_distance - FOLLOW_DISTANCE;  
+  right_difference_distance = right_ir_distance - 5;  
 }
 
 void updateLeftEncoder()
