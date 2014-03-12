@@ -41,7 +41,7 @@ void setup()
 // X Right is positive, Left is negative
 // Y Up is positive, Down is negative
   robot_direction = 0;
-  robot_x = 0;
+  robot_x = 1;
   robot_y = 0;
 
   left_encoder.setHighPinA();
@@ -64,14 +64,6 @@ void setup()
   delay(50);
   TaskRegister(&computeIR,-1,T50MS,TRUE);
   delay(50);
-//  TaskRegister(&PID::staticCompute,(int)&left_PID,T50MS,TRUE);
-//  delay(50);
-//  TaskRegister(&PID::staticCompute,(int)&right_PID,T50MS,TRUE);
-//  delay(50);
- 
-//  pinMode(12,INPUT);
-//  digitalWrite(12,HIGH);
-//  while(digitalRead(12)){}
 }
 
 void loop()
@@ -338,9 +330,6 @@ void setMotors()
 ***************************************************************************/
 void computeEncoderPID()
 {
-//  right_encoder.compute();
-//  left_encoder.compute();
-  
   right_PID.Compute();
   left_PID.Compute();
 }
