@@ -47,83 +47,96 @@ void setup()
   
   cell_display.print(robot_x, robot_y);
 
+// Initialize the encoder PinA and PinB
   left_encoder.setHighPinA();
   left_encoder.setLowPinB();
   right_encoder.setHighPinA();
   right_encoder.setHighPinB();
-  
+
+// Initialize PID Controller for motor PWM  
   left_PID.SetMode(AUTOMATIC);
   left_PID.SetOutputLimits(-255, 255);
   right_PID.SetMode(AUTOMATIC);
   right_PID.SetOutputLimits(-255, 255); 
-  
+
+// Create interrupts for encoder ticks  
   attachInterrupt(0, updateLeftEncoder, RISING);
   attachInterrupt(1, updateRightEncoder, RISING);
-  
+
+// Initialize Task Manager  
   TaskInit();
+// Register a task to automatically calculate encoder distance travelled and velocity
   TaskRegister(&Encoder::staticCompute,(int)&left_encoder,T20MS,TRUE);
   delay(50);
   TaskRegister(&Encoder::staticCompute,(int)&right_encoder,T20MS,TRUE);
   delay(50);
+// Register a task to automatically calculate all the IR distances
   TaskRegister(&computeIR,-1,T50MS,TRUE);
   delay(50);
 }
 
 void loop()
 {
-  driveRobot();      // Main controller
+  driveRobot();      // Main function to drive the robot
 }
 
 void driveRobot()
 {
+// Move from 1,0 to 1,2
   for(int i = 0; i < 2; i++)
-  {
-    driveForwardCell();
-    delay(100); 
-  }
-  
-  turnRight90EncoderFast();
-  delay(300);
-  
-  for(int i = 0; i < 6; i++)
-  {
-    driveForwardCell();
-    delay(100); 
-  } 
-  
-  turnLeft90EncoderFast();
-  delay(300);  
-  
-  driveForwardCell();
-  delay(100);
-
-  turnRight90EncoderFast();
-  delay(300); 
-
-  for(int i = 0; i < 2; i++)
-  {
-    driveForwardCell();
-    delay(100); 
-  }   
-  
-  turnLeft90EncoderFast();
-  delay(300);  
-  
-  for(int i = 0; i < 5; i++)
-  {
-    driveForwardCell();
-    delay(100); 
-  }
-
-  turnLeft90EncoderFast();
-  delay(300);  
-  
-  for(int i = 0; i < 7; i++)
   {
     driveForwardCell();
     delay(100); 
   }  
- 
+// Turn right in 1,2  
+  turnRight90EncoderFast();
+  delay(300);  
+// Move from 1,2 to 8,2  
+  for(int i = 0; i < 7; i++)
+  {
+    driveForwardCell();
+    delay(100); 
+  }
+// Turn left in 8,2  
+  turnLeft90EncoderFast();
+  delay(300);
+// Move from 8,2 to 8,6  
+  for(int i = 0; i < 4; i++)
+  {
+    driveForwardCell();
+    delay(100);
+  }  
+// Turn left in 8,6  
+  turnLeft90EncoderFast();
+  delay(300);
+// Move from 8,6 to 7,6
+  driveForwardCell();
+  delay(100);
+// Turn right in 7,6 
+  turnRight90EncoderFast();
+  delay(300); 
+// Move from 7,6 to 7,9  
+  for(int i = 0; i < 3; i++)
+  {
+    driveForwardCell();
+    delay(100);
+  } 
+// Turn left in 7,9
+  turnLeft90EncoderFast();
+  delay(300); 
+// Move from 7,9 to 5,9  
+  for(int i = 0; i < 2; i++)
+  {
+    driveForwardCell();
+    delay(100);
+  }
+// Turn left in 5,9  
+  turnLeft90EncoderFast();
+  delay(300);
+// Move from 5,9 to 5,8
+  driveForwardCell();
+  delay(100);
+  
   delay(100000);
 }
 
@@ -217,7 +230,7 @@ void turnLeft90EncoderFast()
   else if (robot_direction == 2) {robot_direction = 1;}
   else if (robot_direction == 3) {robot_direction = 2;}
   
-  cell_display.print(robot_x, robot_y);
+//  cell_display.print(robot_x, robot_y);
 }
 
 /* turnRight90EncoderFast()
@@ -249,7 +262,7 @@ void turnRight90EncoderFast()
   else if (robot_direction == 2) {robot_direction = 3;}
   else if (robot_direction == 3) {robot_direction = 0;}
   
-  cell_display.print(robot_x, robot_y);
+//  cell_display.print(robot_x, robot_y);
 }
 
 /* resetEncoder()
