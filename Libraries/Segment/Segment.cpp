@@ -12,8 +12,8 @@ void Segment::print(int a, int b)
 	byte byteA,byteB;
 	byteA = this->getByte(a);
 	byteB = this->getByte(b);
-	this->shiftOut(sdt,sck,byteA);
 	this->shiftOut(sdt,sck,byteB);
+	this->shiftOut(sdt,sck,byteA);
 }
 
 byte Segment::getByte(int input)
@@ -94,9 +94,15 @@ void Segment::shiftOut(int myDataPin, int myClockPin, byte myDataOut) {
     digitalWrite(myDataPin, pinState);
     //register shifts bits on upstroke of clock pin  
     digitalWrite(myClockPin, 1);
+	
+	delay(1);
     //zero the data pin after shift to prevent bleed through
     digitalWrite(myDataPin, 0);
+	
+	
+	
   }
+  
 
   //stop shifting
   digitalWrite(myClockPin, 0);

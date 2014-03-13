@@ -6,6 +6,7 @@ rd /s /q C:\Users\100396659\Dropbox\Arduino\libraries\PID
 rd /s /q C:\Users\100396659\Dropbox\Arduino\libraries\RobotController
 rd /s /q C:\Users\100396659\Dropbox\Arduino\libraries\TaskManager
 rd /s /q C:\Users\100396659\Dropbox\Arduino\libraries\Gyro
+rd /s /q C:\Users\100396659\Dropbox\Arduino\libraries\Segment
 
 PAUSE
 
@@ -17,5 +18,6 @@ mklink /j C:\Users\100396659\Dropbox\Arduino\libraries\PID C:\Users\100396659\Do
 mklink /j C:\Users\100396659\Dropbox\Arduino\libraries\RobotController C:\Users\100396659\Documents\GitHub\AdvMech\Libraries\RobotController
 mklink /j C:\Users\100396659\Dropbox\Arduino\libraries\TaskManager C:\Users\100396659\Documents\GitHub\AdvMech\Libraries\TaskManager
 mklink /j C:\Users\100396659\Dropbox\Arduino\libraries\Gyro C:\Users\100396659\Documents\GitHub\AdvMech\Libraries\Gyro
+mklink /j C:\Users\100396659\Dropbox\Arduino\libraries\Segment C:\Users\100396659\Documents\GitHub\AdvMech\Libraries\Segment
 
 PAUSE

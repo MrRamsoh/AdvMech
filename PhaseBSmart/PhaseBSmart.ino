@@ -8,6 +8,8 @@
 #include <Encoder.h>
 #include <PID.h>
 
+#include <Segment.h>
+
 /*****************************************/
 
 // Front facing IR Sensor connected to Pin A2
@@ -32,8 +34,7 @@ Encoder right_encoder(3, 5, &right_encoder_distance, &right_encoder_velocity, fa
 PID left_PID(&left_encoder_velocity, &left_motor_PWM, &left_motor_setpoint, KP, KI, KD, DIRECT);
 PID right_PID(&right_encoder_velocity, &right_motor_PWM, &right_motor_setpoint, KP, KI, KD, DIRECT);
 
-// Front Light Sensor conected to Pin A1
-LightSensor light(A1);
+Segment cell_display(A4,A5);
 
 void setup() 
 {
@@ -43,6 +44,8 @@ void setup()
   robot_direction = 0;
   robot_x = 1;
   robot_y = 0;
+  
+  cell_display.print(robot_x, robot_y);
 
   left_encoder.setHighPinA();
   left_encoder.setLowPinB();
@@ -73,103 +76,55 @@ void loop()
 
 void driveRobot()
 {
-  for(int i = 0; i < 3; i++)
-  {
-    driveForwardCell();
-    delay(100); 
-  }
-  
-  turnRight90EncoderFast();
-  delay(300);
- 
-  driveForwardCell();
-  delay(100);
-  
-  turnRight90EncoderFast();
-  delay(300);
-  
   for(int i = 0; i < 2; i++)
   {
     driveForwardCell();
     delay(100); 
   }
+  
+  turnRight90EncoderFast();
+  delay(300);
+  
+  for(int i = 0; i < 6; i++)
+  {
+    driveForwardCell();
+    delay(100); 
+  } 
   
   turnLeft90EncoderFast();
-  delay(300);
- 
+  delay(300);  
+  
+  driveForwardCell();
+  delay(100);
+
+  turnRight90EncoderFast();
+  delay(300); 
+
   for(int i = 0; i < 2; i++)
+  {
+    driveForwardCell();
+    delay(100); 
+  }   
+  
+  turnLeft90EncoderFast();
+  delay(300);  
+  
+  for(int i = 0; i < 5; i++)
   {
     driveForwardCell();
     delay(100); 
   }
 
   turnLeft90EncoderFast();
-  delay(300);
+  delay(300);  
   
-  driveForwardCell();
-  delay(100);
-  
-  turnLeft90EncoderFast();
-  delay(300);
-  
-  driveForwardCell();
-  delay(100);
-  
-  turnRight90EncoderFast();
-  delay(300);
-  
-  for(int i = 0; i < 2; i++)
+  for(int i = 0; i < 7; i++)
   {
     driveForwardCell();
     delay(100); 
-  }
-  
-  turnLeft90EncoderFast();
-  delay(300);
-  
-  for(int i = 0; i < 2; i++)
-  {
-    driveForwardCell();
-    delay(100); 
-  }
-  
-  turnRight90EncoderFast();
-  delay(300);
-  
-  for(int i = 0; i < 2; i++)
-  {
-    driveForwardCell();
-    delay(100); 
-  }
-  
-  turnRight90EncoderFast();
-  delay(300);
-  
-  for(int i = 0; i < 2; i++)
-  {
-    driveForwardCell();
-    delay(100); 
-  }
-  
-  turnLeft90EncoderFast();
-  delay(300);
-  
-  for(int i = 0; i < 2; i++)
-  {
-    driveForwardCell();
-    delay(100); 
-  }
-  
-  turnLeft90EncoderFast();
-  delay(300);
-  
-  for(int i = 0; i < 2; i++)
-  {
-    driveForwardCell();
-    delay(100); 
-  } 
-  
-  delay(50000);
+  }  
+ 
+  delay(100000);
 }
 
 /* driveForwardCell()
@@ -197,20 +152,20 @@ void driveForwardCell()
     if (left_ir_distance != NULL && right_ir_distance == NULL)
     {
       increment = left_difference_distance * 50;
-      left_motor_setpoint = 1001 - increment;
-      right_motor_setpoint = 1005 + increment;
+      left_motor_setpoint = 1001 - increment + 100;
+      right_motor_setpoint = 1005 + increment + 100;
     }
     else if (left_ir_distance == NULL && right_ir_distance != NULL)
     {
       increment = right_difference_distance * 50;
-      left_motor_setpoint = 1001 + increment;
-      right_motor_setpoint = 1005 - increment;
+      left_motor_setpoint = 1001 + increment + 100;
+      right_motor_setpoint = 1005 - increment + 100;
     }
     else
     {
       increment = both_difference_distance * 50;
-      left_motor_setpoint = 1001 - increment;
-      right_motor_setpoint = 1005 + increment;
+      left_motor_setpoint = 1001 - increment + 100;
+      right_motor_setpoint = 1005 + increment + 100;
     }
 
     computeEncoderPID();
@@ -229,6 +184,8 @@ void driveForwardCell()
   else if (robot_direction == 1) {robot_x++;}
   else if (robot_direction == 2) {robot_y--;}
   else if (robot_direction == 3) {robot_x--;}
+  
+  cell_display.print(robot_x, robot_y);
 }
 
 /* turnLeft90EncoderFast()
@@ -259,6 +216,8 @@ void turnLeft90EncoderFast()
   else if (robot_direction == 1) {robot_direction = 0;}
   else if (robot_direction == 2) {robot_direction = 1;}
   else if (robot_direction == 3) {robot_direction = 2;}
+  
+  cell_display.print(robot_x, robot_y);
 }
 
 /* turnRight90EncoderFast()
@@ -289,6 +248,8 @@ void turnRight90EncoderFast()
   else if (robot_direction == 1) {robot_direction = 2;}
   else if (robot_direction == 2) {robot_direction = 3;}
   else if (robot_direction == 3) {robot_direction = 0;}
+  
+  cell_display.print(robot_x, robot_y);
 }
 
 /* resetEncoder()
