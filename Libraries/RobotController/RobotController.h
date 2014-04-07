@@ -9,6 +9,9 @@
 #define ONE_CELL_DISTANCE 1550
 #define INCREMENT_LIMIT 150
 
+#define UPPER 1200
+#define LOWER 700
+
 //#define KP 0.0625
 #define KP 0.08
 #define KI 0

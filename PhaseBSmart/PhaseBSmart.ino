@@ -138,30 +138,42 @@ void driveForwardCell()
   { 
     if (left_ir_distance != NULL && right_ir_distance == NULL)
     {
-      increment = left_difference_distance * 50;
-      if (increment > INCREMENT_LIMIT) { increment = INCREMENT_LIMIT;}
-      else if (increment < -INCREMENT_LIMIT) { increment = -INCREMENT_LIMIT;}
-
-      left_motor_setpoint = 1000 - increment;
-      right_motor_setpoint = 1000 + increment;
+      if (left_difference_distance < 0)
+      {
+        left_motor_setpoint = UPPER;
+        right_motor_setpoint = LOWER;
+      }
+      else
+      {
+        left_motor_setpoint = LOWER;
+        right_motor_setpoint = UPPER;
+      }
     }
     else if (left_ir_distance == NULL && right_ir_distance != NULL)
     {
-      increment = right_difference_distance * 50;
-      if (increment > INCREMENT_LIMIT) { increment = INCREMENT_LIMIT;}
-      else if (increment < -INCREMENT_LIMIT) { increment = -INCREMENT_LIMIT;}
-      
-      left_motor_setpoint = 1000 + increment;
-      right_motor_setpoint = 1000 - increment;
+      if (right_difference_distance < 0)
+      {
+        left_motor_setpoint = LOWER;
+        right_motor_setpoint = UPPER;
+      }
+      else
+      {
+        left_motor_setpoint = UPPER;
+        right_motor_setpoint = LOWER;
+      }
     }
     else
     {
-      increment = both_difference_distance * 50;
-      if (increment > INCREMENT_LIMIT) { increment = INCREMENT_LIMIT;}
-      else if (increment < -INCREMENT_LIMIT) { increment = -INCREMENT_LIMIT;}
-      
-      left_motor_setpoint = 1000 - increment;
-      right_motor_setpoint = 1000 + increment;
+      if (left_difference_distance < 0)
+      {
+        left_motor_setpoint = UPPER;
+        right_motor_setpoint = LOWER;
+      }
+      else
+      {
+        left_motor_setpoint = LOWER;
+        right_motor_setpoint = UPPER;
+      }
     }
 
     computeEncoderPID();
@@ -182,6 +194,16 @@ void driveForwardCell()
 //  else if (robot_direction == 3) {robot_x--;}
 //  
 //  cell_display.print(robot_x, robot_y);
+}
+
+void followLeft()
+{
+  increment = left_different_distance
+}
+
+void followRight()
+{
+  
 }
 
 /* turnLeft90EncoderFast()
