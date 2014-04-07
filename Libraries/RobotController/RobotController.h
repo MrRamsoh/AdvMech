@@ -2,11 +2,12 @@
 
 #define NULL 0
 
-#define FOLLOW_DISTANCE 6
+#define FOLLOW_DISTANCE 5.7
 #define FOLLOW_TOLERANCE 0.6
 #define FRONT_STOP_DISTANCE 6.5
 #define STRAIGHT_TOLERANCE 0.7
 #define ONE_CELL_DISTANCE 1550
+#define INCREMENT_LIMIT 150
 
 //#define KP 0.0625
 #define KP 0.08

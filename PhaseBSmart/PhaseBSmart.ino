@@ -71,7 +71,7 @@ void setup()
   TaskRegister(&Encoder::staticCompute,(int)&right_encoder,T20MS,TRUE);
   delay(50);
 // Register a task to automatically calculate all the IR distances
-  TaskRegister(&computeIR,-1,T50MS,TRUE);
+  TaskRegister(&computeIR,-1,T100MS,TRUE);
   delay(50);
 }
 
@@ -82,61 +82,35 @@ void loop()
 
 void driveRobot()
 {
-// Move from 1,0 to 1,2
-  for(int i = 0; i < 2; i++)
-  {
-    driveForwardCell();
-    delay(100); 
-  }  
-// Turn right in 1,2  
-  turnRight90EncoderFast();
-  delay(300);  
-// Move from 1,2 to 8,2  
-  for(int i = 0; i < 7; i++)
-  {
-    driveForwardCell();
-    delay(100); 
-  }
-// Turn left in 8,2  
-  turnLeft90EncoderFast();
-  delay(300);
-// Move from 8,2 to 8,6  
   for(int i = 0; i < 4; i++)
   {
     driveForwardCell();
-    delay(100);
-  }  
-// Turn left in 8,6  
-  turnLeft90EncoderFast();
-  delay(300);
-// Move from 8,6 to 7,6
-  driveForwardCell();
-  delay(100);
-// Turn right in 7,6 
-  turnRight90EncoderFast();
-  delay(300); 
-// Move from 7,6 to 7,9  
-  for(int i = 0; i < 3; i++)
-  {
-    driveForwardCell();
-    delay(100);
   } 
-// Turn left in 7,9
+  stop(60);  
   turnLeft90EncoderFast();
-  delay(300); 
-// Move from 7,9 to 5,9  
-  for(int i = 0; i < 2; i++)
+  stop(60);
+  for(int i = 0; i < 4; i++)
   {
     driveForwardCell();
-    delay(100);
-  }
-// Turn left in 5,9  
+  } 
+  stop(60);
   turnLeft90EncoderFast();
-  delay(300);
-// Move from 5,9 to 5,8
-  driveForwardCell();
-  delay(100);
-  
+  stop(60);
+  turnLeft90EncoderFast();
+  stop(60);
+  for(int i = 0; i < 4; i++)
+  {
+    driveForwardCell();
+  } 
+  stop(60);
+  turnRight90EncoderFast();
+  stop(60);
+  for(int i = 0; i < 4; i++)
+  {
+    driveForwardCell();
+  } 
+  stop(60);    
+
   delay(100000);
 }
 
@@ -165,20 +139,29 @@ void driveForwardCell()
     if (left_ir_distance != NULL && right_ir_distance == NULL)
     {
       increment = left_difference_distance * 50;
-      left_motor_setpoint = 1001 - increment + 100;
-      right_motor_setpoint = 1005 + increment + 100;
+      if (increment > INCREMENT_LIMIT) { increment = INCREMENT_LIMIT;}
+      else if (increment < -INCREMENT_LIMIT) { increment = -INCREMENT_LIMIT;}
+
+      left_motor_setpoint = 1000 - increment;
+      right_motor_setpoint = 1000 + increment;
     }
     else if (left_ir_distance == NULL && right_ir_distance != NULL)
     {
       increment = right_difference_distance * 50;
-      left_motor_setpoint = 1001 + increment + 100;
-      right_motor_setpoint = 1005 - increment + 100;
+      if (increment > INCREMENT_LIMIT) { increment = INCREMENT_LIMIT;}
+      else if (increment < -INCREMENT_LIMIT) { increment = -INCREMENT_LIMIT;}
+      
+      left_motor_setpoint = 1000 + increment;
+      right_motor_setpoint = 1000 - increment;
     }
     else
     {
       increment = both_difference_distance * 50;
-      left_motor_setpoint = 1001 - increment + 100;
-      right_motor_setpoint = 1005 + increment + 100;
+      if (increment > INCREMENT_LIMIT) { increment = INCREMENT_LIMIT;}
+      else if (increment < -INCREMENT_LIMIT) { increment = -INCREMENT_LIMIT;}
+      
+      left_motor_setpoint = 1000 - increment;
+      right_motor_setpoint = 1000 + increment;
     }
 
     computeEncoderPID();
@@ -191,14 +174,14 @@ void driveForwardCell()
     x = 1;
     goto correct;
   }
-  stop();
-  
-  if (robot_direction == 0) {robot_y++;}
-  else if (robot_direction == 1) {robot_x++;}
-  else if (robot_direction == 2) {robot_y--;}
-  else if (robot_direction == 3) {robot_x--;}
-  
-  cell_display.print(robot_x, robot_y);
+//  stop();
+//  
+//  if (robot_direction == 0) {robot_y++;}
+//  else if (robot_direction == 1) {robot_x++;}
+//  else if (robot_direction == 2) {robot_y--;}
+//  else if (robot_direction == 3) {robot_x--;}
+//  
+//  cell_display.print(robot_x, robot_y);
 }
 
 /* turnLeft90EncoderFast()
@@ -223,13 +206,13 @@ void turnLeft90EncoderFast()
     computeEncoderPID();
     setMotors();
   }
-  stop();
-  
-  if (robot_direction == 0) {robot_direction = 3;}
-  else if (robot_direction == 1) {robot_direction = 0;}
-  else if (robot_direction == 2) {robot_direction = 1;}
-  else if (robot_direction == 3) {robot_direction = 2;}
-  
+//  stop();
+//  
+//  if (robot_direction == 0) {robot_direction = 3;}
+//  else if (robot_direction == 1) {robot_direction = 0;}
+//  else if (robot_direction == 2) {robot_direction = 1;}
+//  else if (robot_direction == 3) {robot_direction = 2;}
+//  
 //  cell_display.print(robot_x, robot_y);
 }
 
@@ -255,12 +238,12 @@ void turnRight90EncoderFast()
     computeEncoderPID();
     setMotors();
   }
-  stop();
-  
-  if (robot_direction == 0) {robot_direction = 1;}
-  else if (robot_direction == 1) {robot_direction = 2;}
-  else if (robot_direction == 2) {robot_direction = 3;}
-  else if (robot_direction == 3) {robot_direction = 0;}
+//  stop();
+//  
+//  if (robot_direction == 0) {robot_direction = 1;}
+//  else if (robot_direction == 1) {robot_direction = 2;}
+//  else if (robot_direction == 2) {robot_direction = 3;}
+//  else if (robot_direction == 3) {robot_direction = 0;}
   
 //  cell_display.print(robot_x, robot_y);
 }
@@ -280,7 +263,7 @@ void resetEncoder()
 /* stop()
  * Stops the robot from moving
 ***************************************************************************/
-void stop()
+void stop(int time)
 {
   left_PID.SetMode(MANUAL);  
   right_PID.SetMode(MANUAL);  
@@ -288,7 +271,7 @@ void stop()
   left_motor_PWM = STOP;
   right_motor_PWM = STOP;
   setMotors();
-  delay(20);
+  delay(time);
 }
 
 void setMotors()
@@ -316,7 +299,7 @@ void computeIR(int garbage)
   
   both_difference_distance = left_ir_distance - right_ir_distance;
   left_difference_distance = left_ir_distance - FOLLOW_DISTANCE;
-  right_difference_distance = right_ir_distance - 5;  
+  right_difference_distance = right_ir_distance - FOLLOW_DISTANCE;  
 }
 
 void updateLeftEncoder()
@@ -325,5 +308,4 @@ void updateLeftEncoder()
 }
 void updateRightEncoder()
 {
-  right_encoder.tick();
-}
+  right_encoder.tick();}
